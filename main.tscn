@@ -1,4 +1,4 @@
-[gd_scene load_steps=17 format=3 uid="uid://cbydosia47duf"]
+[gd_scene load_steps=26 format=3 uid="uid://cbydosia47duf"]
 
 [ext_resource type="PackedScene" uid="uid://bq86r4yll8po" path="res://addons/godot-xr-tools/hands/scenes/lowpoly/left_fullglove_low.tscn" id="1_ckbsl"]
 [ext_resource type="Script" path="res://main.gd" id="1_cthjx"]
@@ -8,8 +8,13 @@
 [ext_resource type="PackedScene" uid="uid://diyu06cw06syv" path="res://addons/godot-xr-tools/player/player_body.tscn" id="4_fr5tq"]
 [ext_resource type="Material" uid="uid://c5no820h1vdbl" path="res://rooms/holodeck_grid.material" id="5_c8qb3"]
 [ext_resource type="Shader" uid="uid://b5xmy0gsmqbam" path="res://rooms/holodeck_map_shader.tres" id="5_snoy4"]
+[ext_resource type="PackedScene" uid="uid://b4ysuy43poobf" path="res://addons/godot-xr-tools/functions/function_pickup.tscn" id="5_vq85m"]
 [ext_resource type="PackedScene" uid="uid://b6bk2pj8vbj28" path="res://addons/godot-xr-tools/functions/movement_turn.tscn" id="5_yuk0q"]
 [ext_resource type="Texture2D" uid="uid://dd6n51g6uam2k" path="res://rooms/grid_glow.png" id="6_fqo6o"]
+[ext_resource type="PackedScene" uid="uid://bxm1ply47vaan" path="res://addons/godot-xr-tools/functions/movement_climb.tscn" id="9_6f5lv"]
+[ext_resource type="Script" path="res://addons/godot-xr-tools/overrides/ground_physics_settings.gd" id="9_qng54"]
+[ext_resource type="PackedScene" uid="uid://ctltchlf2j2r4" path="res://addons/xr-simulator/XRSimulator.tscn" id="10_kug0p"]
+[ext_resource type="PackedScene" uid="uid://c8l60rnugru40" path="res://addons/godot-xr-tools/objects/pickable.tscn" id="13_6vldh"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_3bvb1"]
 
@@ -19,6 +24,18 @@ sky_material = SubResource("ProceduralSkyMaterial_3bvb1")
 [sub_resource type="Environment" id="Environment_mt1qa"]
 background_mode = 2
 sky = SubResource("Sky_s1a1u")
+
+[sub_resource type="Resource" id="Resource_cbi6m"]
+script = ExtResource("9_qng54")
+flags = 64
+move_drag = 15.0
+move_traction = 30.0
+stop_on_slope = true
+move_max_slope = 45.0
+jump_max_slope = 45.0
+jump_velocity = 3.0
+bounciness = 0.0
+bounce_threshold = 1.0
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_ebfcv"]
 size = Vector3(10, 1, 10)
@@ -32,6 +49,16 @@ shader_parameter/grid_texture = ExtResource("6_fqo6o")
 
 [sub_resource type="QuadMesh" id="QuadMesh_y7lh1"]
 size = Vector2(10, 10)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_6ytjn"]
+size = Vector3(0.5, 0.5, 1)
+
+[sub_resource type="BoxMesh" id="BoxMesh_aa8de"]
+size = Vector3(0.5, 0.5, 1)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_uv0mh"]
+transparency = 1
+albedo_color = Color(0.152941, 1, 1, 0.443137)
 
 [node name="Main" type="Node3D"]
 script = ExtResource("1_cthjx")
@@ -56,8 +83,9 @@ tracker = &"left_hand"
 [node name="LeftHand" parent="XROrigin3D/LeftHand" instance=ExtResource("1_ckbsl")]
 
 [node name="MovementDirect" parent="XROrigin3D/LeftHand" instance=ExtResource("3_mbhq1")]
-max_speed = 1.0
 strafe = true
+
+[node name="FunctionPickup" parent="XROrigin3D/LeftHand" instance=ExtResource("5_vq85m")]
 
 [node name="RightHand" type="XRController3D" parent="XROrigin3D"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.5, 1, -0.5)
@@ -69,7 +97,15 @@ tracker = &"right_hand"
 turn_mode = 1
 step_turn_angle = 30.0
 
+[node name="FunctionPickup" parent="XROrigin3D/RightHand" instance=ExtResource("5_vq85m")]
+
 [node name="PlayerBody" parent="XROrigin3D" instance=ExtResource("4_fr5tq")]
+physics = SubResource("Resource_cbi6m")
+
+[node name="MovementClimb" parent="XROrigin3D" instance=ExtResource("9_6f5lv")]
+
+[node name="XRSimulator" parent="XROrigin3D" instance=ExtResource("10_kug0p")]
+xr_origin = NodePath("..")
 
 [node name="Room" type="Node3D" parent="."]
 
@@ -120,4 +156,19 @@ transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 
 material_override = ExtResource("5_c8qb3")
 mesh = SubResource("QuadMesh_y7lh1")
 
-[connection signal="input_vector2_changed" from="XROrigin3D/LeftHand" to="." method="_on_left_hand_input_vector_2_changed"]
+[node name="PickableObject" parent="." instance=ExtResource("13_6vldh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.30761, -2.07294)
+collision_layer = 65536
+collision_mask = 0
+freeze = true
+release_mode = 1
+ranged_grab_method = 0
+
+[node name="CollisionShape3D" parent="PickableObject" index="0"]
+shape = SubResource("BoxShape3D_6ytjn")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="PickableObject"]
+mesh = SubResource("BoxMesh_aa8de")
+surface_material_override/0 = SubResource("StandardMaterial3D_uv0mh")
+
+[editable path="PickableObject"]

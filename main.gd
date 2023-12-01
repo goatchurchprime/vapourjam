@@ -10,6 +10,3 @@ func _ready():
 func _process(delta):
 	pass
 
-
-func _on_left_hand_input_vector_2_changed(name, value):
-	print(name, value)
