@@ -1,4 +1,4 @@
-[gd_scene load_steps=26 format=3 uid="uid://cbydosia47duf"]
+[gd_scene load_steps=38 format=3 uid="uid://cbydosia47duf"]
 
 [ext_resource type="PackedScene" uid="uid://bq86r4yll8po" path="res://addons/godot-xr-tools/hands/scenes/lowpoly/left_fullglove_low.tscn" id="1_ckbsl"]
 [ext_resource type="Script" path="res://main.gd" id="1_cthjx"]
@@ -15,6 +15,8 @@
 [ext_resource type="Script" path="res://addons/godot-xr-tools/overrides/ground_physics_settings.gd" id="9_qng54"]
 [ext_resource type="PackedScene" uid="uid://ctltchlf2j2r4" path="res://addons/xr-simulator/XRSimulator.tscn" id="10_kug0p"]
 [ext_resource type="PackedScene" uid="uid://c8l60rnugru40" path="res://addons/godot-xr-tools/objects/pickable.tscn" id="13_6vldh"]
+[ext_resource type="Script" path="res://addons/godot-xr-tools/objects/climbable.gd" id="14_dvawi"]
+[ext_resource type="Shader" path="res://materials/vapour.gdshader" id="16_ofour"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_3bvb1"]
 
@@ -50,6 +52,45 @@ shader_parameter/grid_texture = ExtResource("6_fqo6o")
 [sub_resource type="QuadMesh" id="QuadMesh_y7lh1"]
 size = Vector2(10, 10)
 
+[sub_resource type="Curve" id="Curve_4jemb"]
+_data = [Vector2(0.00191572, 0.984988), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_q48xl"]
+curve = SubResource("Curve_4jemb")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_wn2uy"]
+emission_shape = 6
+emission_ring_axis = Vector3(0, 1, 0)
+emission_ring_height = 0.0
+emission_ring_radius = 0.4
+emission_ring_inner_radius = 0.2
+direction = Vector3(0, 1, 0)
+spread = 0.0
+initial_velocity_min = 0.5
+initial_velocity_max = 0.5
+gravity = Vector3(0, 0, 0)
+alpha_curve = SubResource("CurveTexture_q48xl")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_u2spw"]
+render_priority = 0
+shader = ExtResource("16_ofour")
+shader_parameter/albedo = Color(1, 1, 1, 0.603922)
+shader_parameter/point_size = 15.0
+shader_parameter/colormixweight = 0.05
+
+[sub_resource type="PointMesh" id="PointMesh_kx7b6"]
+material = SubResource("ShaderMaterial_u2spw")
+
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_ql0qg"]
+height = 0.2
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_2qcrn"]
+height = 0.2
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_jaokg"]
+albedo_color = Color(0.729412, 0.388235, 0.121569, 1)
+
 [sub_resource type="BoxShape3D" id="BoxShape3D_6ytjn"]
 size = Vector3(0.5, 0.5, 1)
 
@@ -59,6 +100,10 @@ size = Vector3(0.5, 0.5, 1)
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_uv0mh"]
 transparency = 1
 albedo_color = Color(0.152941, 1, 1, 0.443137)
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_8k2pl"]
+
+[sub_resource type="SphereMesh" id="SphereMesh_vit6f"]
 
 [node name="Main" type="Node3D"]
 script = ExtResource("1_cthjx")
@@ -122,6 +167,7 @@ mesh = SubResource("QuadMesh_y7lh1")
 
 [node name="StaticBody3D2" type="StaticBody3D" parent="Room"]
 transform = Transform3D(-4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0, 1, 5, 4, 0)
+script = ExtResource("14_dvawi")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Room/StaticBody3D2"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.5, 0)
@@ -134,6 +180,7 @@ mesh = SubResource("QuadMesh_y7lh1")
 
 [node name="StaticBody3D3" type="StaticBody3D" parent="Room"]
 transform = Transform3D(-4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0, 1, -5, 4, 0)
+script = ExtResource("14_dvawi")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Room/StaticBody3D3"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.5, 0)
@@ -146,6 +193,7 @@ mesh = SubResource("QuadMesh_y7lh1")
 
 [node name="StaticBody3D4" type="StaticBody3D" parent="Room"]
 transform = Transform3D(1.91069e-15, -4.37114e-08, -1, -1, -4.37114e-08, 0, -4.37114e-08, 1, -4.37114e-08, 0, 4, -5)
+script = ExtResource("14_dvawi")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Room/StaticBody3D4"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.5, 0)
@@ -156,19 +204,112 @@ transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 
 material_override = ExtResource("5_c8qb3")
 mesh = SubResource("QuadMesh_y7lh1")
 
-[node name="PickableObject" parent="." instance=ExtResource("13_6vldh")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.30761, -2.07294)
+[node name="GPUVapourSource" parent="." instance=ExtResource("13_6vldh")]
+transform = Transform3D(0.919204, 0.393781, 0, -0.393781, 0.919204, 0, 0, 0, 1, -2.41735, 1.30761, -2.07294)
 collision_layer = 65536
 collision_mask = 0
 freeze = true
 release_mode = 1
 ranged_grab_method = 0
 
-[node name="CollisionShape3D" parent="PickableObject" index="0"]
+[node name="GPUParticles3D" type="GPUParticles3D" parent="GPUVapourSource"]
+transform = Transform3D(1, -2.98023e-08, 0, 2.98023e-08, 1, 0, 0, 0, 1, 0, 0, 0)
+amount = 16800
+lifetime = 4.0
+explosiveness = 0.1
+draw_order = 3
+process_material = SubResource("ParticleProcessMaterial_wn2uy")
+draw_pass_1 = SubResource("PointMesh_kx7b6")
+
+[node name="CollisionShape3D" parent="GPUVapourSource" index="1"]
+shape = SubResource("CylinderShape3D_ql0qg")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="GPUVapourSource"]
+mesh = SubResource("CylinderMesh_2qcrn")
+surface_material_override/0 = SubResource("StandardMaterial3D_jaokg")
+
+[node name="GPUAttractor" parent="." instance=ExtResource("13_6vldh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.68991, 2.26717, -2.10317)
+collision_layer = 65536
+collision_mask = 0
+freeze = true
+release_mode = 1
+ranged_grab_method = 0
+
+[node name="GPUParticlesAttractorBox3D" type="GPUParticlesAttractorBox3D" parent="GPUAttractor"]
+strength = -8.0
+attenuation = 0.0669859
+directionality = 1.0
+size = Vector3(0.5, 0.5, 1)
+
+[node name="CollisionShape3D" parent="GPUAttractor" index="1"]
 shape = SubResource("BoxShape3D_6ytjn")
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="PickableObject"]
+[node name="MeshInstance3D" type="MeshInstance3D" parent="GPUAttractor"]
 mesh = SubResource("BoxMesh_aa8de")
 surface_material_override/0 = SubResource("StandardMaterial3D_uv0mh")
 
-[editable path="PickableObject"]
+[node name="GPUAttractor2" parent="." instance=ExtResource("13_6vldh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.877868, 1.77639, -2.10317)
+collision_layer = 65536
+collision_mask = 0
+freeze = true
+release_mode = 1
+ranged_grab_method = 0
+
+[node name="GPUParticlesAttractorBox3D" type="GPUParticlesAttractorBox3D" parent="GPUAttractor2"]
+strength = -8.0
+attenuation = 0.0669859
+directionality = 1.0
+size = Vector3(0.5, 0.5, 1)
+
+[node name="CollisionShape3D" parent="GPUAttractor2" index="1"]
+shape = SubResource("BoxShape3D_6ytjn")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="GPUAttractor2"]
+mesh = SubResource("BoxMesh_aa8de")
+surface_material_override/0 = SubResource("StandardMaterial3D_uv0mh")
+
+[node name="GPUAttractor3" parent="." instance=ExtResource("13_6vldh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.210678, 2.013, -2.1995)
+collision_layer = 65536
+collision_mask = 0
+freeze = true
+release_mode = 1
+ranged_grab_method = 0
+
+[node name="GPUParticlesAttractorBox3D" type="GPUParticlesAttractorSphere3D" parent="GPUAttractor3"]
+attenuation = 0.0669859
+radius = 0.5
+
+[node name="CollisionShape3D" parent="GPUAttractor3" index="1"]
+shape = SubResource("SphereShape3D_8k2pl")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="GPUAttractor3"]
+mesh = SubResource("SphereMesh_vit6f")
+surface_material_override/0 = SubResource("StandardMaterial3D_uv0mh")
+
+[node name="GPUAttractor4" parent="." instance=ExtResource("13_6vldh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.32829, 1.81366, -2.1995)
+collision_layer = 65536
+collision_mask = 0
+freeze = true
+release_mode = 1
+ranged_grab_method = 0
+
+[node name="GPUParticlesAttractorBox3D" type="GPUParticlesAttractorSphere3D" parent="GPUAttractor4"]
+attenuation = 0.0669859
+radius = 0.5
+
+[node name="CollisionShape3D" parent="GPUAttractor4" index="1"]
+shape = SubResource("SphereShape3D_8k2pl")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="GPUAttractor4"]
+mesh = SubResource("SphereMesh_vit6f")
+surface_material_override/0 = SubResource("StandardMaterial3D_uv0mh")
+
+[editable path="GPUVapourSource"]
+[editable path="GPUAttractor"]
+[editable path="GPUAttractor2"]
+[editable path="GPUAttractor3"]
+[editable path="GPUAttractor4"]
