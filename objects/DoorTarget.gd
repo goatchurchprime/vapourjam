@@ -11,6 +11,7 @@ func scoreviewport():
 	await RenderingServer.frame_post_draw
 	var image: Image = get_node("../SubViewport").get_viewport().get_texture().get_image()
 	var ldooropen = true
+	var maxshrinksz = -1.0
 	var vpsz = get_node("../SubViewport").size
 	for qh in range(2):
 		for qw in range(2):
@@ -26,6 +27,8 @@ func scoreviewport():
 					else:
 						qn.scale = Vector3(sz, sz, sz)
 						ldooropen = false
+					if maxshrinksz == -1.0 or maxshrinksz < sz:
+						maxshrinksz = sz
 			else:
 				var sz = 4 # qn.scale.x + 1.0
 				if sz <= 4:
@@ -33,7 +36,14 @@ func scoreviewport():
 					qn.scale = Vector3(sz, sz, sz)
 				ldooropen = false
 						
-	$QExit.visible = ldooropen
+	if not $QExit.visible and ldooropen:
+		$QExit.visible = true
+		$OpenSound.play()
+	elif maxshrinksz != -1.0:
+		$RingSound.pitch_scale = (maxshrinksz + 1.0)*0.3
+		$RingSound.play()
+		
+		
 			
 			
 var t0 = 0
