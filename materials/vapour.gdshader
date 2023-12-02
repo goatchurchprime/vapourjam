@@ -4,8 +4,8 @@ render_mode world_vertex_coords,blend_mix,depth_draw_opaque,cull_back,diffuse_bu
 uniform vec4 albedo : source_color;
 uniform float point_size : hint_range(0,128) = 15.0;
 
-const vec3 closecol = vec3(1,1,0);
-const vec3 farcol = vec3(0.1,1.0,1.0);
+const vec3 closecol = vec3(1,1,1);
+uniform vec3 farcol = vec3(0.1,0.1,0.1);
 const float fardist = 6.0;
 const float fardisttaper = 2.0;
 const float fardisttaperfac = -(fardisttaper*((fardisttaper + fardist)))/fardist;
@@ -17,8 +17,9 @@ void vertex() {
 	POINT_SIZE = point_size/distcamera;
 
 	float mixval = (1.0/(distcamera + fardisttaper) - 1.0/fardisttaper)*fardisttaperfac;
-	vec3 distancecolor = mix(closecol, farcol, mixval);
-	COLOR.rgb = mix(distancecolor, COLOR.rgb, colormixweight);
+	//vec3 distancecolor = mix(closecol, farcol, mixval);
+	//COLOR.rgb = mix(distancecolor, COLOR.rgb, colormixweight);
+	COLOR.rgb = mix(COLOR.rgb, farcol, mixval);
 	NORMAL = vec3(0.0,1.0,0.0);
 }
 

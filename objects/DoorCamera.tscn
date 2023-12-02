@@ -127,5 +127,6 @@ emission_angle_enabled = true
 
 [node name="OpenSound" type="AudioStreamPlayer3D" parent="Quarters" index="6"]
 stream = ExtResource("4_iprav")
+volume_db = -20.0
 
 [connection signal="action_pressed" from="." to="Quarters" method="_on_door_camera_action_pressed"]
