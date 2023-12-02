@@ -75,7 +75,7 @@ emission_ring_inner_radius = 0.2
 direction = Vector3(0, 1, 0)
 spread = 0.0
 initial_velocity_min = 0.5
-initial_velocity_max = 0.6
+initial_velocity_max = 0.9
 gravity = Vector3(0, 0, 0)
 alpha_curve = SubResource("CurveTexture_q48xl")
 collision_mode = 1
@@ -114,15 +114,17 @@ void fragment() {
 	METALLIC = 0.0;
 	ROUGHNESS = 0.0;
 	SPECULAR = 0.0;
-	ALPHA *= albedo.a * COLOR.a;
+//	ALPHA *= albedo.a * COLOR.a;
 
 	float rsq = (POINT_COORD.x-0.5)*(POINT_COORD.x-0.5) + (POINT_COORD.y-0.5)*(POINT_COORD.y-0.5);
-	if (rsq > 0.25+point_size*0.002) 
+	if (rsq > 0.25+point_size*0.001) 
 		discard;
 
 	//ALPHA = 0.6*mix(1.0, 0.0, rsq*4.0);
 	//ALBEDO *= mix(vec3(1.0, 1.0, 1.0), bordercolor, rsq*3.0);
 	ALPHA *= mix(1.0, 0.0, abs(cos((1.0+rsq*8.0))));
+	//ALBEDO.g = mix(0.0, 1.0, abs(cos((1.0+rsq*8.0))));
+	//ALPHA *= mix(1.0, 0.0, rsq*4.0);
 }
 "
 
