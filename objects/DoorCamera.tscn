@@ -1,0 +1,118 @@
+[gd_scene load_steps=14 format=3 uid="uid://bb2dqe3rnux7n"]
+
+[ext_resource type="PackedScene" uid="uid://c8l60rnugru40" path="res://addons/godot-xr-tools/objects/pickable.tscn" id="1_mai3m"]
+[ext_resource type="Script" path="res://objects/DoorTarget.gd" id="2_w2fis"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_xxi68"]
+size = Vector3(0.5, 0.5, 1)
+
+[sub_resource type="BoxMesh" id="BoxMesh_jqxjd"]
+size = Vector3(0.5, 0.5, 1)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_djpwj"]
+transparency = 1
+albedo_color = Color(1, 1, 0.0745098, 0.172549)
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_nmur5"]
+size = Vector2(0.5, 0.5)
+orientation = 2
+
+[sub_resource type="ViewportTexture" id="ViewportTexture_yvg67"]
+viewport_path = NodePath("SubViewport")
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_en20n"]
+resource_local_to_scene = true
+shading_mode = 0
+albedo_texture = SubResource("ViewportTexture_yvg67")
+texture_filter = 0
+disable_receive_shadows = true
+
+[sub_resource type="Environment" id="Environment_1fay3"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_cthqa"]
+size = Vector3(0.063, 0.063, 0.02)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_bcltu"]
+albedo_color = Color(0.0235294, 1, 0.239216, 1)
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_smc7u"]
+top_radius = 0.25
+bottom_radius = 0.25
+height = 0.3
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_cbekw"]
+albedo_color = Color(0.00392157, 0.0352941, 1, 1)
+
+[node name="DoorCamera" instance=ExtResource("1_mai3m")]
+collision_layer = 65536
+collision_mask = 0
+freeze = true
+
+[node name="CollisionShape3D" parent="." index="0"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.5)
+shape = SubResource("BoxShape3D_xxi68")
+
+[node name="CameraBox" type="MeshInstance3D" parent="." index="1"]
+transform = Transform3D(1, 0, 0, 0, 0.999998, 0.0019722, 0, -0.0019722, 0.999998, 0, 0, -0.5)
+mesh = SubResource("BoxMesh_jqxjd")
+skeleton = NodePath("")
+surface_material_override/0 = SubResource("StandardMaterial3D_djpwj")
+
+[node name="ViewPanel" type="MeshInstance3D" parent="." index="2"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.01)
+mesh = SubResource("PlaneMesh_nmur5")
+skeleton = NodePath("")
+surface_material_override/0 = SubResource("StandardMaterial3D_en20n")
+
+[node name="RemoteTransform3D" type="RemoteTransform3D" parent="." index="3"]
+transform = Transform3D(1, 0, 0, 0, 0.999998, 0.0019722, 0, -0.0019722, 0.999998, 0, 0, 0)
+remote_path = NodePath("../SubViewport/Camera3D")
+
+[node name="SubViewport" type="SubViewport" parent="." index="4"]
+transparent_bg = true
+size = Vector2i(16, 16)
+render_target_update_mode = 1
+
+[node name="Camera3D" type="Camera3D" parent="SubViewport" index="0"]
+transform = Transform3D(1, 0, 0, 0, 0.999998, 0.0019722, 0, -0.0019722, 0.999998, 0, 0, 0)
+cull_mask = 1024
+environment = SubResource("Environment_1fay3")
+projection = 1
+size = 0.5
+far = 1.0
+
+[node name="Quarters" type="Node3D" parent="." index="5"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.0627134)
+script = ExtResource("2_w2fis")
+
+[node name="Q10" type="MeshInstance3D" parent="Quarters" index="0"]
+transform = Transform3D(4, 0, 0, 0, 4, 0, 0, 0, 4, 0.125, 0.125, 0)
+mesh = SubResource("BoxMesh_cthqa")
+skeleton = NodePath("")
+surface_material_override/0 = SubResource("StandardMaterial3D_bcltu")
+
+[node name="Q11" type="MeshInstance3D" parent="Quarters" index="1"]
+transform = Transform3D(4, 0, 0, 0, 4, 0, 0, 0, 4, 0.125, -0.125, 0)
+mesh = SubResource("BoxMesh_cthqa")
+skeleton = NodePath("")
+surface_material_override/0 = SubResource("StandardMaterial3D_bcltu")
+
+[node name="Q00" type="MeshInstance3D" parent="Quarters" index="2"]
+transform = Transform3D(4, 0, 0, 0, 4, 0, 0, 0, 4, -0.125, 0.125, 0)
+mesh = SubResource("BoxMesh_cthqa")
+skeleton = NodePath("")
+surface_material_override/0 = SubResource("StandardMaterial3D_bcltu")
+
+[node name="Q01" type="MeshInstance3D" parent="Quarters" index="3"]
+transform = Transform3D(4, 0, 0, 0, 4, 0, 0, 0, 4, -0.125, -0.125, 0)
+mesh = SubResource("BoxMesh_cthqa")
+skeleton = NodePath("")
+surface_material_override/0 = SubResource("StandardMaterial3D_bcltu")
+
+[node name="QExit" type="MeshInstance3D" parent="Quarters" index="4"]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, -0.0322573)
+visible = false
+mesh = SubResource("CylinderMesh_smc7u")
+surface_material_override/0 = SubResource("StandardMaterial3D_cbekw")
+
+[connection signal="action_pressed" from="." to="Quarters" method="_on_door_camera_action_pressed"]
