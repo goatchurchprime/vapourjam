@@ -1,4 +1,4 @@
-[gd_scene load_steps=38 format=3 uid="uid://cbydosia47duf"]
+[gd_scene load_steps=32 format=3 uid="uid://cbydosia47duf"]
 
 [ext_resource type="PackedScene" uid="uid://bq86r4yll8po" path="res://addons/godot-xr-tools/hands/scenes/lowpoly/left_fullglove_low.tscn" id="1_ckbsl"]
 [ext_resource type="Script" path="res://main.gd" id="1_cthjx"]
@@ -6,22 +6,19 @@
 [ext_resource type="PackedScene" uid="uid://xqimcf20s2jp" path="res://addons/godot-xr-tools/hands/scenes/lowpoly/right_fullglove_low.tscn" id="2_21ao1"]
 [ext_resource type="PackedScene" uid="uid://bl2nuu3qhlb5k" path="res://addons/godot-xr-tools/functions/movement_direct.tscn" id="3_mbhq1"]
 [ext_resource type="PackedScene" uid="uid://diyu06cw06syv" path="res://addons/godot-xr-tools/player/player_body.tscn" id="4_fr5tq"]
-[ext_resource type="Material" uid="uid://c5no820h1vdbl" path="res://rooms/holodeck_grid.material" id="5_c8qb3"]
-[ext_resource type="Shader" uid="uid://b5xmy0gsmqbam" path="res://rooms/holodeck_map_shader.tres" id="5_snoy4"]
 [ext_resource type="PackedScene" uid="uid://b4ysuy43poobf" path="res://addons/godot-xr-tools/functions/function_pickup.tscn" id="5_vq85m"]
 [ext_resource type="PackedScene" uid="uid://b6bk2pj8vbj28" path="res://addons/godot-xr-tools/functions/movement_turn.tscn" id="5_yuk0q"]
-[ext_resource type="Texture2D" uid="uid://dd6n51g6uam2k" path="res://rooms/grid_glow.png" id="6_fqo6o"]
 [ext_resource type="PackedScene" uid="uid://c2q5phg8w08o" path="res://addons/godot-xr-tools/functions/movement_jump.tscn" id="8_3e0hb"]
 [ext_resource type="PackedScene" uid="uid://bxm1ply47vaan" path="res://addons/godot-xr-tools/functions/movement_climb.tscn" id="9_6f5lv"]
 [ext_resource type="Script" path="res://addons/godot-xr-tools/overrides/ground_physics_settings.gd" id="9_qng54"]
 [ext_resource type="PackedScene" uid="uid://ctltchlf2j2r4" path="res://addons/xr-simulator/XRSimulator.tscn" id="10_kug0p"]
-[ext_resource type="Script" path="res://addons/godot-xr-tools/objects/climbable.gd" id="14_dvawi"]
-[ext_resource type="PackedScene" uid="uid://cjyilbm4ucc7s" path="res://addons/godot-xr-tools/objects/climbable.tscn" id="16_t5vuh"]
+[ext_resource type="PackedScene" uid="uid://cw8ba26q0dasa" path="res://rooms/BaseRoom.tscn" id="13_5eumo"]
 [ext_resource type="PackedScene" uid="uid://bb2dqe3rnux7n" path="res://objects/DoorCamera.tscn" id="20_iigjo"]
 [ext_resource type="PackedScene" uid="uid://bhr0hku266fqw" path="res://objects/VapourSource.tscn" id="20_oi0qg"]
 [ext_resource type="PackedScene" uid="uid://brkefl6virxd3" path="res://objects/SphereCollider.tscn" id="21_i6ogd"]
 [ext_resource type="PackedScene" uid="uid://oafuaon5kmv4" path="res://objects/BoxAccelerator.tscn" id="22_3jrln"]
 [ext_resource type="PackedScene" uid="uid://bptwjfkavah45" path="res://objects/SphereAttractor.tscn" id="22_g0p67"]
+[ext_resource type="Texture2D" uid="uid://bt8vctc2fbnbc" path="res://pictures/fishtensegrity.jpg" id="23_kf8tx"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_3bvb1"]
 
@@ -43,23 +40,6 @@ jump_max_slope = 45.0
 jump_velocity = 5.0
 bounciness = 0.0
 bounce_threshold = 1.0
-
-[sub_resource type="BoxShape3D" id="BoxShape3D_ebfcv"]
-size = Vector3(10, 1, 10)
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_aqj8g"]
-render_priority = 0
-shader = ExtResource("5_snoy4")
-shader_parameter/grid_scale = Vector2(0.5, 0.5)
-shader_parameter/grid_color = Color(1, 0.192157, 0.894118, 1)
-shader_parameter/grid_texture = ExtResource("6_fqo6o")
-
-[sub_resource type="QuadMesh" id="QuadMesh_y7lh1"]
-size = Vector2(10, 10)
-
-[sub_resource type="CylinderShape3D" id="CylinderShape3D_hl2q6"]
-
-[sub_resource type="CylinderMesh" id="CylinderMesh_5qnka"]
 
 [sub_resource type="Curve" id="Curve_doi5e"]
 _data = [Vector2(0.00191572, 0.984988), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
@@ -144,6 +124,12 @@ shader_parameter/colormixweight = 0.05
 resource_local_to_scene = true
 material = SubResource("ShaderMaterial_o058f")
 
+[sub_resource type="QuadMesh" id="QuadMesh_srmgh"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_v4s43"]
+shading_mode = 0
+albedo_texture = ExtResource("23_kf8tx")
+
 [node name="Main" type="Node3D"]
 script = ExtResource("1_cthjx")
 
@@ -170,6 +156,7 @@ tracker = &"left_hand"
 [node name="LeftHand" parent="XROrigin3D/LeftHand" instance=ExtResource("1_ckbsl")]
 
 [node name="MovementDirect" parent="XROrigin3D/LeftHand" instance=ExtResource("3_mbhq1")]
+max_speed = 2.2
 strafe = true
 
 [node name="FunctionPickup" parent="XROrigin3D/LeftHand" instance=ExtResource("5_vq85m")]
@@ -197,67 +184,7 @@ physics = SubResource("Resource_cbi6m")
 [node name="XRSimulator" parent="XROrigin3D" instance=ExtResource("10_kug0p")]
 xr_origin = NodePath("..")
 
-[node name="Room" type="Node3D" parent="."]
-
-[node name="StaticBody3D" type="StaticBody3D" parent="Room"]
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Room/StaticBody3D"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.5, 0)
-shape = SubResource("BoxShape3D_ebfcv")
-
-[node name="MeshInstance3D" type="MeshInstance3D" parent="Room/StaticBody3D"]
-transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 2.38419e-07, 0)
-material_override = SubResource("ShaderMaterial_aqj8g")
-mesh = SubResource("QuadMesh_y7lh1")
-
-[node name="StaticBody3D2" type="StaticBody3D" parent="Room"]
-transform = Transform3D(-4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0, 1, 5, 4, 0)
-script = ExtResource("14_dvawi")
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Room/StaticBody3D2"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.5, 0)
-shape = SubResource("BoxShape3D_ebfcv")
-
-[node name="MeshInstance3D" type="MeshInstance3D" parent="Room/StaticBody3D2"]
-transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0)
-material_override = ExtResource("5_c8qb3")
-mesh = SubResource("QuadMesh_y7lh1")
-
-[node name="StaticBody3D3" type="StaticBody3D" parent="Room"]
-transform = Transform3D(-4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0, 1, -5, 4, 0)
-script = ExtResource("14_dvawi")
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Room/StaticBody3D3"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.5, 0)
-shape = SubResource("BoxShape3D_ebfcv")
-
-[node name="MeshInstance3D" type="MeshInstance3D" parent="Room/StaticBody3D3"]
-transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0)
-material_override = ExtResource("5_c8qb3")
-mesh = SubResource("QuadMesh_y7lh1")
-
-[node name="StaticBody3D4" type="StaticBody3D" parent="Room"]
-transform = Transform3D(1.91069e-15, -4.37114e-08, -1, -1, -4.37114e-08, 0, -4.37114e-08, 1, -4.37114e-08, 0, 4, -5)
-script = ExtResource("14_dvawi")
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Room/StaticBody3D4"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.5, 0)
-shape = SubResource("BoxShape3D_ebfcv")
-
-[node name="MeshInstance3D" type="MeshInstance3D" parent="Room/StaticBody3D4"]
-transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0)
-material_override = ExtResource("5_c8qb3")
-mesh = SubResource("QuadMesh_y7lh1")
-
-[node name="Climbable" parent="Room" instance=ExtResource("16_t5vuh")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.14292, 1.72827)
-
-[node name="CollisionShape3D" parent="Room/Climbable" index="0"]
-shape = SubResource("CylinderShape3D_hl2q6")
-
-[node name="MeshInstance3D" type="MeshInstance3D" parent="Room/Climbable"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.0970397, 0)
-mesh = SubResource("CylinderMesh_5qnka")
+[node name="Room" parent="." instance=ExtResource("13_5eumo")]
 
 [node name="DoorCamera" parent="." instance=ExtResource("20_iigjo")]
 transform = Transform3D(0.970628, 0.240584, 0, -0.240584, 0.970628, 0, 0, 0, 1, -0.319651, 1.85285, -0.944086)
@@ -297,7 +224,20 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.22284, 0.551277, 0)
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.92666, 0.551277, 0)
 
 [node name="BoxAccelerator4" parent="." instance=ExtResource("22_3jrln")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.50332, 0.551277, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.4989, 0.622275, -0.0473732)
 
-[editable path="Room/Climbable"]
+[node name="Picture" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.50848, 2.17285, -3.55136)
+
+[node name="CSGBox3D" type="CSGBox3D" parent="Picture"]
+size = Vector3(1.1, 1.1, 0.05)
+
+[node name="CSGBox3D" type="CSGBox3D" parent="Picture/CSGBox3D"]
+operation = 2
+size = Vector3(1, 1, 0.2)
+
+[node name="Canvas" type="MeshInstance3D" parent="Picture"]
+mesh = SubResource("QuadMesh_srmgh")
+surface_material_override/0 = SubResource("StandardMaterial3D_v4s43")
+
 [editable path="VapourSource"]
