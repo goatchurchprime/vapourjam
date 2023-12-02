@@ -15,10 +15,11 @@ func scoreviewport():
 	await RenderingServer.frame_post_draw
 	var image: Image = get_node("../SubViewport").get_viewport().get_texture().get_image()
 	var ldooropen = true
+	var vpsz = get_node("../SubViewport").size
 	for qh in range(2):
 		for qw in range(2):
-			var x = qw*8 + 3
-			var y = qh*8 + 3
+			var x = int(vpsz.x*(0.25 + 0.5*qw))
+			var y = int(vpsz.y*(0.25 + 0.5*qh))
 			var c = image.get_pixel(x, y)
 			var qn = get_node("Q%d%d" % [qw, qh])
 			if c.a > alphameasure:

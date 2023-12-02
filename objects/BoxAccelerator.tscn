@@ -1,0 +1,44 @@
+[gd_scene load_steps=7 format=3 uid="uid://oafuaon5kmv4"]
+
+[ext_resource type="PackedScene" uid="uid://c8l60rnugru40" path="res://addons/godot-xr-tools/objects/pickable.tscn" id="1_pxwr5"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_wwnvs"]
+size = Vector3(0.5, 0.5, 1)
+
+[sub_resource type="BoxMesh" id="BoxMesh_inq3d"]
+size = Vector3(0.5, 0.5, 1)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_81n3b"]
+transparency = 1
+albedo_color = Color(0.152941, 1, 1, 0.384314)
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_5akxp"]
+top_radius = 0.0
+bottom_radius = 0.1
+height = 0.4
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_mh63c"]
+albedo_color = Color(0, 0.596078, 1, 1)
+
+[node name="BoxAccelerator" instance=ExtResource("1_pxwr5")]
+collision_layer = 65536
+collision_mask = 0
+freeze = true
+
+[node name="CollisionShape3D" parent="." index="0"]
+shape = SubResource("BoxShape3D_wwnvs")
+
+[node name="GPUParticlesAttractorBox3D" type="GPUParticlesAttractorBox3D" parent="." index="1"]
+strength = 5.0
+attenuation = 0.0457527
+directionality = 1.0
+size = Vector3(0.5, 0.5, 1)
+
+[node name="BoxMesh" type="MeshInstance3D" parent="." index="2"]
+mesh = SubResource("BoxMesh_inq3d")
+surface_material_override/0 = SubResource("StandardMaterial3D_81n3b")
+
+[node name="ArrowMesh" type="MeshInstance3D" parent="." index="3"]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0)
+mesh = SubResource("CylinderMesh_5akxp")
+surface_material_override/0 = SubResource("StandardMaterial3D_mh63c")

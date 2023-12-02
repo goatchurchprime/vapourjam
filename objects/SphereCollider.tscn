@@ -1,0 +1,26 @@
+[gd_scene load_steps=5 format=3 uid="uid://brkefl6virxd3"]
+
+[ext_resource type="PackedScene" uid="uid://c8l60rnugru40" path="res://addons/godot-xr-tools/objects/pickable.tscn" id="1_te1no"]
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_4qem2"]
+
+[sub_resource type="SphereMesh" id="SphereMesh_lgml0"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_loo31"]
+transparency = 1
+albedo_color = Color(0.996078, 0.831373, 0.858824, 0.443137)
+
+[node name="SphereCollider" instance=ExtResource("1_te1no")]
+collision_layer = 65536
+collision_mask = 0
+freeze = true
+
+[node name="CollisionShape3D" parent="." index="0"]
+shape = SubResource("SphereShape3D_4qem2")
+
+[node name="GPUParticlesCollisionSphere3D" type="GPUParticlesCollisionSphere3D" parent="." index="1"]
+radius = 0.5
+
+[node name="SphereMesh" type="MeshInstance3D" parent="." index="2"]
+mesh = SubResource("SphereMesh_lgml0")
+surface_material_override/0 = SubResource("StandardMaterial3D_loo31")

@@ -1,4 +1,4 @@
-[gd_scene load_steps=57 format=3 uid="uid://cbydosia47duf"]
+[gd_scene load_steps=38 format=3 uid="uid://cbydosia47duf"]
 
 [ext_resource type="PackedScene" uid="uid://bq86r4yll8po" path="res://addons/godot-xr-tools/hands/scenes/lowpoly/left_fullglove_low.tscn" id="1_ckbsl"]
 [ext_resource type="Script" path="res://main.gd" id="1_cthjx"]
@@ -15,11 +15,13 @@
 [ext_resource type="PackedScene" uid="uid://bxm1ply47vaan" path="res://addons/godot-xr-tools/functions/movement_climb.tscn" id="9_6f5lv"]
 [ext_resource type="Script" path="res://addons/godot-xr-tools/overrides/ground_physics_settings.gd" id="9_qng54"]
 [ext_resource type="PackedScene" uid="uid://ctltchlf2j2r4" path="res://addons/xr-simulator/XRSimulator.tscn" id="10_kug0p"]
-[ext_resource type="PackedScene" uid="uid://c8l60rnugru40" path="res://addons/godot-xr-tools/objects/pickable.tscn" id="13_6vldh"]
 [ext_resource type="Script" path="res://addons/godot-xr-tools/objects/climbable.gd" id="14_dvawi"]
 [ext_resource type="PackedScene" uid="uid://cjyilbm4ucc7s" path="res://addons/godot-xr-tools/objects/climbable.tscn" id="16_t5vuh"]
 [ext_resource type="PackedScene" uid="uid://bb2dqe3rnux7n" path="res://objects/DoorCamera.tscn" id="20_iigjo"]
 [ext_resource type="PackedScene" uid="uid://bhr0hku266fqw" path="res://objects/VapourSource.tscn" id="20_oi0qg"]
+[ext_resource type="PackedScene" uid="uid://brkefl6virxd3" path="res://objects/SphereCollider.tscn" id="21_i6ogd"]
+[ext_resource type="PackedScene" uid="uid://oafuaon5kmv4" path="res://objects/BoxAccelerator.tscn" id="22_3jrln"]
+[ext_resource type="PackedScene" uid="uid://bptwjfkavah45" path="res://objects/SphereAttractor.tscn" id="22_g0p67"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_3bvb1"]
 
@@ -38,7 +40,7 @@ move_traction = 30.0
 stop_on_slope = true
 move_max_slope = 45.0
 jump_max_slope = 45.0
-jump_velocity = 6.0
+jump_velocity = 5.0
 bounciness = 0.0
 bounce_threshold = 1.0
 
@@ -59,9 +61,6 @@ size = Vector2(10, 10)
 
 [sub_resource type="CylinderMesh" id="CylinderMesh_5qnka"]
 
-[sub_resource type="CylinderShape3D" id="CylinderShape3D_ql0qg"]
-height = 0.2
-
 [sub_resource type="Curve" id="Curve_doi5e"]
 _data = [Vector2(0.00191572, 0.984988), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
 point_count = 2
@@ -69,155 +68,12 @@ point_count = 2
 [sub_resource type="CurveTexture" id="CurveTexture_q48xl"]
 curve = SubResource("Curve_doi5e")
 
-[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_20dvd"]
-emission_shape = 6
-emission_ring_axis = Vector3(0, 1, 0)
-emission_ring_height = 0.0
-emission_ring_radius = 0.4
-emission_ring_inner_radius = 0.2
-direction = Vector3(0, 1, 0)
-spread = 0.0
-initial_velocity_min = 0.5
-initial_velocity_max = 0.9
-gravity = Vector3(0, 0, 0)
-alpha_curve = SubResource("CurveTexture_q48xl")
-collision_mode = 1
-collision_friction = 0.0
-collision_bounce = 1.0
-
-[sub_resource type="Shader" id="Shader_8ay4m"]
-code = "shader_type spatial;
-render_mode world_vertex_coords,blend_mix,depth_draw_opaque,cull_back,diffuse_burley,specular_schlick_ggx;
-
-uniform vec4 albedo : source_color;
-uniform float point_size : hint_range(0,128) = 15.0;
-
-const vec3 closecol = vec3(1,1,0);
-const vec3 farcol = vec3(0.1,1.0,1.0);
-const float fardist = 6.0;
-const float fardisttaper = 2.0;
-const float fardisttaperfac = -(fardisttaper*((fardisttaper + fardist)))/fardist;
-uniform float colormixweight = 0.05; 
-const vec3 bordercolor = vec3(0.1, 0.1, 0.2);
-
-void vertex() {
-	float distcamera = length(CAMERA_POSITION_WORLD - VERTEX); 
-	POINT_SIZE = point_size/distcamera;
-
-	float mixval = (1.0/(distcamera + fardisttaper) - 1.0/fardisttaper)*fardisttaperfac;
-	vec3 distancecolor = mix(closecol, farcol, mixval);
-	COLOR.rgb = mix(distancecolor, COLOR.rgb, colormixweight);
-	NORMAL = vec3(0.0,1.0,0.0);
-}
-
-
-void fragment() {
-	vec2 base_uv = UV;
-	ALBEDO = albedo.rgb * COLOR.rgb;
-	METALLIC = 0.0;
-	ROUGHNESS = 0.0;
-	SPECULAR = 0.0;
-//	ALPHA *= albedo.a * COLOR.a;
-
-	float rsq = (POINT_COORD.x-0.5)*(POINT_COORD.x-0.5) + (POINT_COORD.y-0.5)*(POINT_COORD.y-0.5);
-	if (rsq > 0.25+point_size*0.001) 
-		discard;
-
-	//ALPHA = 0.6*mix(1.0, 0.0, rsq*4.0);
-	//ALBEDO *= mix(vec3(1.0, 1.0, 1.0), bordercolor, rsq*3.0);
-	ALPHA *= mix(1.0, 0.0, abs(cos((1.0+rsq*8.0))));
-	//ALBEDO.g = mix(0.0, 1.0, abs(cos((1.0+rsq*8.0))));
-	//ALPHA *= mix(1.0, 0.0, rsq*4.0);
-}
-"
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_701k3"]
-render_priority = 0
-shader = SubResource("Shader_8ay4m")
-shader_parameter/albedo = Color(1, 1, 1, 0.603922)
-shader_parameter/point_size = 15.0
-shader_parameter/colormixweight = 0.05
-
-[sub_resource type="PointMesh" id="PointMesh_kx7b6"]
-material = SubResource("ShaderMaterial_701k3")
-
-[sub_resource type="CylinderMesh" id="CylinderMesh_2qcrn"]
-height = 0.2
-
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_jaokg"]
-albedo_color = Color(0.729412, 0.388235, 0.121569, 1)
-
-[sub_resource type="CylinderShape3D" id="CylinderShape3D_p5lo2"]
-height = 0.2
-radius = 0.25
-
-[sub_resource type="Curve" id="Curve_4jemb"]
-_data = [Vector2(0.00191572, 0.984988), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
-point_count = 2
-
-[sub_resource type="CurveTexture" id="CurveTexture_6t2xi"]
-curve = SubResource("Curve_4jemb")
-
-[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_wn2uy"]
-emission_shape = 6
-emission_ring_axis = Vector3(0, 1, 0)
-emission_ring_height = 0.0
-emission_ring_radius = 0.2
-emission_ring_inner_radius = 0.1
-direction = Vector3(0, 1, 0)
-spread = 0.0
-initial_velocity_min = 0.5
-initial_velocity_max = 0.6
-gravity = Vector3(0, 0, 0)
-alpha_curve = SubResource("CurveTexture_6t2xi")
-collision_mode = 1
-collision_friction = 0.2
-collision_bounce = 0.5
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_aft3q"]
-render_priority = 0
-shader = SubResource("Shader_8ay4m")
-shader_parameter/albedo = Color(0.392157, 0.709804, 0.427451, 0.603922)
-shader_parameter/point_size = 15.0
-shader_parameter/colormixweight = 0.05
-
-[sub_resource type="PointMesh" id="PointMesh_wab5v"]
-material = SubResource("ShaderMaterial_aft3q")
-
-[sub_resource type="CylinderMesh" id="CylinderMesh_ckc0c"]
-top_radius = 0.25
-bottom_radius = 0.2
-height = 0.2
-
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_gqim7"]
-albedo_color = Color(0.729412, 0.388235, 0.121569, 1)
-metallic = 0.57
-roughness = 0.17
-
-[sub_resource type="BoxShape3D" id="BoxShape3D_6ytjn"]
-size = Vector3(0.5, 0.5, 1)
-
-[sub_resource type="BoxMesh" id="BoxMesh_aa8de"]
-size = Vector3(0.5, 0.5, 1)
-
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_uv0mh"]
-transparency = 1
-albedo_color = Color(0.152941, 1, 1, 0.443137)
-
-[sub_resource type="SphereShape3D" id="SphereShape3D_8k2pl"]
-
-[sub_resource type="SphereMesh" id="SphereMesh_vit6f"]
-
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_pvw2u"]
-transparency = 1
-albedo_color = Color(0.996078, 0.831373, 0.858824, 0.443137)
-
 [sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_qjtok"]
 resource_local_to_scene = true
 emission_shape = 6
 emission_ring_axis = Vector3(0, 1, 0)
 emission_ring_height = 0.0
-emission_ring_radius = 0.7
+emission_ring_radius = 0.2
 emission_ring_inner_radius = 0.1
 direction = Vector3(0, 1, 0)
 spread = 0.0
@@ -403,193 +259,45 @@ shape = SubResource("CylinderShape3D_hl2q6")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.0970397, 0)
 mesh = SubResource("CylinderMesh_5qnka")
 
-[node name="GPUVapourSource" parent="." instance=ExtResource("13_6vldh")]
-transform = Transform3D(0.919204, 0.393781, 0, -0.393781, 0.919204, 0, 0, 0, 1, -2.41735, 1.30761, -2.07294)
-visible = false
-collision_layer = 65536
-collision_mask = 0
-freeze = true
-release_mode = 1
-ranged_grab_method = 0
-
-[node name="CollisionShape3D" parent="GPUVapourSource" index="0"]
-shape = SubResource("CylinderShape3D_ql0qg")
-
-[node name="GPUParticles3D" type="GPUParticles3D" parent="GPUVapourSource"]
-transform = Transform3D(1, -2.98023e-08, 0, 2.98023e-08, 1, 0, 0, 0, 1, 0, 0, 0)
-amount = 16800
-lifetime = 8.0
-speed_scale = 0.5
-explosiveness = 0.1
-interpolate = false
-draw_order = 3
-process_material = SubResource("ParticleProcessMaterial_20dvd")
-draw_pass_1 = SubResource("PointMesh_kx7b6")
-
-[node name="MeshInstance3D" type="MeshInstance3D" parent="GPUVapourSource"]
-mesh = SubResource("CylinderMesh_2qcrn")
-surface_material_override/0 = SubResource("StandardMaterial3D_jaokg")
-
-[node name="GPUVapourSource2" parent="." instance=ExtResource("13_6vldh")]
-transform = Transform3D(0.763852, 0.645391, 0, -0.645391, 0.763852, 0, 0, 0, 1, 0.429466, 0.931384, -2.47877)
-visible = false
-collision_layer = 65536
-collision_mask = 0
-freeze = true
-release_mode = 1
-ranged_grab_method = 0
-
-[node name="CollisionShape3D" parent="GPUVapourSource2" index="0"]
-shape = SubResource("CylinderShape3D_p5lo2")
-
-[node name="GPUParticles3D" type="GPUParticles3D" parent="GPUVapourSource2"]
-transform = Transform3D(1, -2.98023e-08, 0, 2.98023e-08, 1, 0, 0, 0, 1, 0, 0, 0)
-layers = 1025
-amount = 16800
-lifetime = 6.0
-explosiveness = 0.1
-draw_order = 3
-process_material = SubResource("ParticleProcessMaterial_wn2uy")
-draw_pass_1 = SubResource("PointMesh_wab5v")
-
-[node name="MeshInstance3D" type="MeshInstance3D" parent="GPUVapourSource2"]
-mesh = SubResource("CylinderMesh_ckc0c")
-surface_material_override/0 = SubResource("StandardMaterial3D_gqim7")
-
-[node name="GPUAttractor" parent="." instance=ExtResource("13_6vldh")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.68991, 2.26717, -2.10317)
-collision_layer = 65536
-collision_mask = 0
-freeze = true
-release_mode = 1
-ranged_grab_method = 0
-
-[node name="CollisionShape3D" parent="GPUAttractor" index="0"]
-shape = SubResource("BoxShape3D_6ytjn")
-
-[node name="GPUParticlesAttractorBox3D" type="GPUParticlesAttractorBox3D" parent="GPUAttractor"]
-strength = -8.0
-attenuation = 0.0457527
-directionality = 1.0
-size = Vector3(0.5, 0.5, 1)
-
-[node name="MeshInstance3D" type="MeshInstance3D" parent="GPUAttractor"]
-mesh = SubResource("BoxMesh_aa8de")
-surface_material_override/0 = SubResource("StandardMaterial3D_uv0mh")
-
-[node name="GPUAttractor2" parent="." instance=ExtResource("13_6vldh")]
-transform = Transform3D(1, 0, 0, 0, 0.367053, 0.9302, 0, -0.9302, 0.367053, -2.06036, 2.14701, -3.07663)
-collision_layer = 65536
-collision_mask = 0
-freeze = true
-release_mode = 1
-ranged_grab_method = 0
-
-[node name="CollisionShape3D" parent="GPUAttractor2" index="0"]
-shape = SubResource("BoxShape3D_6ytjn")
-
-[node name="GPUParticlesAttractorBox3D" type="GPUParticlesAttractorBox3D" parent="GPUAttractor2"]
-strength = 3.0
-attenuation = 0.0114382
-directionality = 1.0
-size = Vector3(0.5, 0.5, 1)
-
-[node name="MeshInstance3D" type="MeshInstance3D" parent="GPUAttractor2"]
-mesh = SubResource("BoxMesh_aa8de")
-surface_material_override/0 = SubResource("StandardMaterial3D_uv0mh")
-
-[node name="GPUAttractor3" parent="." instance=ExtResource("13_6vldh")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.64166, 2.857, -1.13688)
-collision_layer = 65536
-collision_mask = 0
-freeze = true
-release_mode = 1
-ranged_grab_method = 0
-
-[node name="CollisionShape3D" parent="GPUAttractor3" index="0"]
-shape = SubResource("SphereShape3D_8k2pl")
-
-[node name="GPUParticlesAttractorBox3D" type="GPUParticlesAttractorSphere3D" parent="GPUAttractor3"]
-attenuation = 0.0669859
-radius = 0.5
-
-[node name="MeshInstance3D" type="MeshInstance3D" parent="GPUAttractor3"]
-mesh = SubResource("SphereMesh_vit6f")
-surface_material_override/0 = SubResource("StandardMaterial3D_uv0mh")
-
-[node name="GPUAttractor4" parent="." instance=ExtResource("13_6vldh")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.32829, 3.50625, -2.1995)
-collision_layer = 65536
-collision_mask = 0
-freeze = true
-release_mode = 1
-ranged_grab_method = 0
-
-[node name="CollisionShape3D" parent="GPUAttractor4" index="0"]
-shape = SubResource("SphereShape3D_8k2pl")
-
-[node name="GPUParticlesAttractorBox3D" type="GPUParticlesAttractorSphere3D" parent="GPUAttractor4"]
-attenuation = 0.0669859
-radius = 0.5
-
-[node name="MeshInstance3D" type="MeshInstance3D" parent="GPUAttractor4"]
-mesh = SubResource("SphereMesh_vit6f")
-surface_material_override/0 = SubResource("StandardMaterial3D_uv0mh")
-
-[node name="GPUAttractor5" parent="." instance=ExtResource("13_6vldh")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.49413, 3.69405, -2.12659)
-collision_layer = 65536
-collision_mask = 0
-freeze = true
-release_mode = 1
-ranged_grab_method = 0
-
-[node name="CollisionShape3D" parent="GPUAttractor5" index="0"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.0019, 0.702881, 0)
-shape = SubResource("SphereShape3D_8k2pl")
-
-[node name="GPUParticlesAttractorBox3D" type="GPUParticlesAttractorSphere3D" parent="GPUAttractor5"]
-attenuation = 0.0669859
-radius = 0.5
-
-[node name="MeshInstance3D" type="MeshInstance3D" parent="GPUAttractor5"]
-mesh = SubResource("SphereMesh_vit6f")
-surface_material_override/0 = SubResource("StandardMaterial3D_uv0mh")
-
-[node name="GPUCollider" parent="." instance=ExtResource("13_6vldh")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.9205, 3.17108, -0.74086)
-collision_layer = 65536
-collision_mask = 0
-freeze = true
-release_mode = 1
-ranged_grab_method = 0
-
-[node name="CollisionShape3D" parent="GPUCollider" index="0"]
-shape = SubResource("SphereShape3D_8k2pl")
-
-[node name="GPUParticlesCollisionSphere3D" type="GPUParticlesCollisionSphere3D" parent="GPUCollider"]
-radius = 0.5
-
-[node name="MeshInstance3D" type="MeshInstance3D" parent="GPUCollider"]
-mesh = SubResource("SphereMesh_vit6f")
-surface_material_override/0 = SubResource("StandardMaterial3D_pvw2u")
-
-[node name="DoorCamera2" parent="." instance=ExtResource("20_iigjo")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.33082, 1.53905, -2.42116)
+[node name="DoorCamera" parent="." instance=ExtResource("20_iigjo")]
+transform = Transform3D(0.970628, 0.240584, 0, -0.240584, 0.970628, 0, 0, 0, 1, -0.319651, 1.85285, -0.944086)
 
 [node name="VapourSource" parent="." instance=ExtResource("20_oi0qg")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0270998, 1.21692, -1.80477)
 
 [node name="GPUParticles3D" parent="VapourSource" index="1"]
 process_material = SubResource("ParticleProcessMaterial_qjtok")
 draw_pass_1 = SubResource("PointMesh_bu86o")
 
+[node name="SphereCollider" parent="." instance=ExtResource("21_i6ogd")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.370296, 1.3329, -2.4178)
+
+[node name="SphereCollider2" parent="." instance=ExtResource("21_i6ogd")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.59556, 1.3329, -2.4178)
+
+[node name="SphereCollider3" parent="." instance=ExtResource("21_i6ogd")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.82283, 1.3329, -2.4178)
+
+[node name="SphereAttractor" parent="." instance=ExtResource("22_g0p67")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.9916, 0.686416, -1.43787)
+
+[node name="SphereAttractor3" parent="." instance=ExtResource("22_g0p67")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.57522, 0.686416, -1.43787)
+
+[node name="SphereAttractor2" parent="." instance=ExtResource("22_g0p67")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.81653, 0.686416, -1.43787)
+
+[node name="BoxAccelerator" parent="." instance=ExtResource("22_3jrln")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.46913, 0.551277, 0)
+
+[node name="BoxAccelerator2" parent="." instance=ExtResource("22_3jrln")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.22284, 0.551277, 0)
+
+[node name="BoxAccelerator3" parent="." instance=ExtResource("22_3jrln")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.92666, 0.551277, 0)
+
+[node name="BoxAccelerator4" parent="." instance=ExtResource("22_3jrln")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.50332, 0.551277, 0)
+
 [editable path="Room/Climbable"]
-[editable path="GPUVapourSource"]
-[editable path="GPUVapourSource2"]
-[editable path="GPUAttractor"]
-[editable path="GPUAttractor2"]
-[editable path="GPUAttractor3"]
-[editable path="GPUAttractor4"]
-[editable path="GPUAttractor5"]
-[editable path="GPUCollider"]
 [editable path="VapourSource"]
