@@ -4,11 +4,7 @@ extends Node3D
 const alphameasure = 0.7
 
 func _ready():
-	print(get_node("../ViewPanel").get_surface_override_material(0).albedo_texture.viewport_path)
-	print(get_node("/root/Main").get_path_to(get_node("../SubViewport")))
 	get_node("../ViewPanel").get_surface_override_material(0).albedo_texture = get_node("../SubViewport").get_viewport().get_texture()
-	#get_node("../ViewPanel").get_surface_override_material(0).albedo_texture.viewport_path = get_node("/root/Main").get_path_to(get_node("../SubViewport"))
-	print("l ", get_node("/root/Main").get_path_to(get_node("../SubViewport")))
 
 func scoreviewport():
 	get_node("../SubViewport").render_target_update_mode = SubViewport.UPDATE_ONCE

@@ -1,0 +1,142 @@
+[gd_scene load_steps=13 format=3 uid="uid://co2tisev5dyb"]
+
+[ext_resource type="PackedScene" uid="uid://cw8ba26q0dasa" path="res://rooms/BaseRoom.tscn" id="1_yy76j"]
+[ext_resource type="PackedScene" uid="uid://bhr0hku266fqw" path="res://objects/VapourSource.tscn" id="2_cbw5x"]
+[ext_resource type="PackedScene" uid="uid://brkefl6virxd3" path="res://objects/SphereCollider.tscn" id="3_yh8t6"]
+[ext_resource type="PackedScene" uid="uid://bptwjfkavah45" path="res://objects/SphereAttractor.tscn" id="4_seuw3"]
+[ext_resource type="PackedScene" uid="uid://oafuaon5kmv4" path="res://objects/BoxAccelerator.tscn" id="5_q5jg5"]
+[ext_resource type="PackedScene" uid="uid://dstwgq7sc08wb" path="res://objects/FramedPicture.tscn" id="6_n21iv"]
+
+[sub_resource type="Curve" id="Curve_aq8le"]
+_data = [Vector2(0.00191572, 0.984988), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_q48xl"]
+curve = SubResource("Curve_aq8le")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_nwk64"]
+resource_local_to_scene = true
+emission_shape = 6
+emission_ring_axis = Vector3(0, 1, 0)
+emission_ring_height = 0.0
+emission_ring_radius = 0.2
+emission_ring_inner_radius = 0.1
+direction = Vector3(0, 1, 0)
+spread = 0.0
+initial_velocity_min = 0.5
+initial_velocity_max = 0.6
+gravity = Vector3(0, 0, 0)
+alpha_curve = SubResource("CurveTexture_q48xl")
+collision_mode = 1
+collision_friction = 0.2
+collision_bounce = 0.5
+
+[sub_resource type="Shader" id="Shader_5402f"]
+resource_local_to_scene = true
+code = "shader_type spatial;
+render_mode world_vertex_coords,blend_mix,depth_draw_opaque,cull_back,diffuse_burley,specular_schlick_ggx;
+
+uniform vec4 albedo : source_color;
+uniform float point_size : hint_range(0,128) = 15.0;
+
+const vec3 closecol = vec3(1,1,0);
+const vec3 farcol = vec3(0.1,1.0,1.0);
+const float fardist = 6.0;
+const float fardisttaper = 2.0;
+const float fardisttaperfac = -(fardisttaper*((fardisttaper + fardist)))/fardist;
+uniform float colormixweight = 0.05; 
+const vec3 bordercolor = vec3(0.1, 0.1, 0.2);
+
+void vertex() {
+	float distcamera = length(CAMERA_POSITION_WORLD - VERTEX); 
+	POINT_SIZE = point_size/distcamera;
+
+	float mixval = (1.0/(distcamera + fardisttaper) - 1.0/fardisttaper)*fardisttaperfac;
+	vec3 distancecolor = mix(closecol, farcol, mixval);
+	COLOR.rgb = mix(distancecolor, COLOR.rgb, colormixweight);
+	NORMAL = vec3(0.0,1.0,0.0);
+}
+
+
+void fragment() {
+	vec2 base_uv = UV;
+	ALBEDO = albedo.rgb * COLOR.rgb;
+	METALLIC = 0.0;
+	ROUGHNESS = 0.0;
+	SPECULAR = 0.0;
+//	ALPHA *= albedo.a * COLOR.a;
+
+	float rsq = (POINT_COORD.x-0.5)*(POINT_COORD.x-0.5) + (POINT_COORD.y-0.5)*(POINT_COORD.y-0.5);
+	if (rsq > 0.25+point_size*0.001) 
+		discard;
+
+	//ALPHA = 0.6*mix(1.0, 0.0, rsq*4.0);
+	//ALBEDO *= mix(vec3(1.0, 1.0, 1.0), bordercolor, rsq*3.0);
+	ALPHA *= mix(1.0, 0.0, abs(cos((1.0+rsq*8.0))));
+	//ALBEDO.g = mix(0.0, 1.0, abs(cos((1.0+rsq*8.0))));
+	//ALPHA *= mix(1.0, 0.0, rsq*4.0);
+}
+"
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_o058f"]
+resource_local_to_scene = true
+render_priority = 0
+shader = SubResource("Shader_5402f")
+shader_parameter/albedo = Color(0.921569, 0.709804, 0.427451, 0.776471)
+shader_parameter/point_size = 15.0
+shader_parameter/colormixweight = 0.05
+
+[sub_resource type="PointMesh" id="PointMesh_2ftyw"]
+resource_local_to_scene = true
+material = SubResource("ShaderMaterial_o058f")
+
+[node name="Level1" instance=ExtResource("1_yy76j")]
+
+[node name="SpawnPoint" parent="." index="0"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.85975, 2.09887, 3.34872)
+
+[node name="Climbable" parent="." index="5"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.98358, 1.14292, 3.34472)
+
+[node name="VapourSource" parent="." index="6" instance=ExtResource("2_cbw5x")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0270998, 1.21692, -1.80477)
+
+[node name="GPUParticles3D" parent="VapourSource" index="1"]
+process_material = SubResource("ParticleProcessMaterial_nwk64")
+draw_pass_1 = SubResource("PointMesh_2ftyw")
+
+[node name="SphereCollider" parent="." index="7" instance=ExtResource("3_yh8t6")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.370296, 1.3329, -2.4178)
+
+[node name="SphereCollider2" parent="." index="8" instance=ExtResource("3_yh8t6")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.59556, 1.3329, -2.4178)
+
+[node name="SphereCollider3" parent="." index="9" instance=ExtResource("3_yh8t6")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.82283, 1.3329, -2.4178)
+
+[node name="SphereAttractor" parent="." index="10" instance=ExtResource("4_seuw3")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.9916, 0.686416, -1.43787)
+
+[node name="SphereAttractor3" parent="." index="11" instance=ExtResource("4_seuw3")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.57522, 0.686416, -1.43787)
+
+[node name="SphereAttractor2" parent="." index="12" instance=ExtResource("4_seuw3")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.81653, 0.686416, -1.43787)
+
+[node name="BoxAccelerator" parent="." index="13" instance=ExtResource("5_q5jg5")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.46913, 0.551277, 0)
+
+[node name="BoxAccelerator2" parent="." index="14" instance=ExtResource("5_q5jg5")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.22284, 0.551277, 0)
+
+[node name="BoxAccelerator3" parent="." index="15" instance=ExtResource("5_q5jg5")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.92666, 0.551277, 0)
+
+[node name="BoxAccelerator4" parent="." index="16" instance=ExtResource("5_q5jg5")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.4989, 0.622275, -0.0473732)
+
+[node name="FramedPicture" parent="." index="17" instance=ExtResource("6_n21iv")]
+transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 1.50848, 2.17285, -4.40754)
+
+[editable path="Climbable"]
+[editable path="VapourSource"]

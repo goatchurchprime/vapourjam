@@ -1,4 +1,4 @@
-[gd_scene load_steps=32 format=3 uid="uid://cbydosia47duf"]
+[gd_scene load_steps=18 format=3 uid="uid://cbydosia47duf"]
 
 [ext_resource type="PackedScene" uid="uid://bq86r4yll8po" path="res://addons/godot-xr-tools/hands/scenes/lowpoly/left_fullglove_low.tscn" id="1_ckbsl"]
 [ext_resource type="Script" path="res://main.gd" id="1_cthjx"]
@@ -12,13 +12,7 @@
 [ext_resource type="PackedScene" uid="uid://bxm1ply47vaan" path="res://addons/godot-xr-tools/functions/movement_climb.tscn" id="9_6f5lv"]
 [ext_resource type="Script" path="res://addons/godot-xr-tools/overrides/ground_physics_settings.gd" id="9_qng54"]
 [ext_resource type="PackedScene" uid="uid://ctltchlf2j2r4" path="res://addons/xr-simulator/XRSimulator.tscn" id="10_kug0p"]
-[ext_resource type="PackedScene" uid="uid://cw8ba26q0dasa" path="res://rooms/BaseRoom.tscn" id="13_5eumo"]
-[ext_resource type="PackedScene" uid="uid://bb2dqe3rnux7n" path="res://objects/DoorCamera.tscn" id="20_iigjo"]
-[ext_resource type="PackedScene" uid="uid://bhr0hku266fqw" path="res://objects/VapourSource.tscn" id="20_oi0qg"]
-[ext_resource type="PackedScene" uid="uid://brkefl6virxd3" path="res://objects/SphereCollider.tscn" id="21_i6ogd"]
-[ext_resource type="PackedScene" uid="uid://oafuaon5kmv4" path="res://objects/BoxAccelerator.tscn" id="22_3jrln"]
-[ext_resource type="PackedScene" uid="uid://bptwjfkavah45" path="res://objects/SphereAttractor.tscn" id="22_g0p67"]
-[ext_resource type="Texture2D" uid="uid://bt8vctc2fbnbc" path="res://pictures/fishtensegrity.jpg" id="23_kf8tx"]
+[ext_resource type="PackedScene" uid="uid://co2tisev5dyb" path="res://rooms/Level1.tscn" id="13_4v33y"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_3bvb1"]
 
@@ -40,95 +34,6 @@ jump_max_slope = 45.0
 jump_velocity = 5.0
 bounciness = 0.0
 bounce_threshold = 1.0
-
-[sub_resource type="Curve" id="Curve_doi5e"]
-_data = [Vector2(0.00191572, 0.984988), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
-point_count = 2
-
-[sub_resource type="CurveTexture" id="CurveTexture_q48xl"]
-curve = SubResource("Curve_doi5e")
-
-[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_qjtok"]
-resource_local_to_scene = true
-emission_shape = 6
-emission_ring_axis = Vector3(0, 1, 0)
-emission_ring_height = 0.0
-emission_ring_radius = 0.2
-emission_ring_inner_radius = 0.1
-direction = Vector3(0, 1, 0)
-spread = 0.0
-initial_velocity_min = 0.5
-initial_velocity_max = 0.6
-gravity = Vector3(0, 0, 0)
-alpha_curve = SubResource("CurveTexture_q48xl")
-collision_mode = 1
-collision_friction = 0.2
-collision_bounce = 0.5
-
-[sub_resource type="Shader" id="Shader_wuf5l"]
-resource_local_to_scene = true
-code = "shader_type spatial;
-render_mode world_vertex_coords,blend_mix,depth_draw_opaque,cull_back,diffuse_burley,specular_schlick_ggx;
-
-uniform vec4 albedo : source_color;
-uniform float point_size : hint_range(0,128) = 15.0;
-
-const vec3 closecol = vec3(1,1,0);
-const vec3 farcol = vec3(0.1,1.0,1.0);
-const float fardist = 6.0;
-const float fardisttaper = 2.0;
-const float fardisttaperfac = -(fardisttaper*((fardisttaper + fardist)))/fardist;
-uniform float colormixweight = 0.05; 
-const vec3 bordercolor = vec3(0.1, 0.1, 0.2);
-
-void vertex() {
-	float distcamera = length(CAMERA_POSITION_WORLD - VERTEX); 
-	POINT_SIZE = point_size/distcamera;
-
-	float mixval = (1.0/(distcamera + fardisttaper) - 1.0/fardisttaper)*fardisttaperfac;
-	vec3 distancecolor = mix(closecol, farcol, mixval);
-	COLOR.rgb = mix(distancecolor, COLOR.rgb, colormixweight);
-	NORMAL = vec3(0.0,1.0,0.0);
-}
-
-
-void fragment() {
-	vec2 base_uv = UV;
-	ALBEDO = albedo.rgb * COLOR.rgb;
-	METALLIC = 0.0;
-	ROUGHNESS = 0.0;
-	SPECULAR = 0.0;
-//	ALPHA *= albedo.a * COLOR.a;
-
-	float rsq = (POINT_COORD.x-0.5)*(POINT_COORD.x-0.5) + (POINT_COORD.y-0.5)*(POINT_COORD.y-0.5);
-	if (rsq > 0.25+point_size*0.001) 
-		discard;
-
-	//ALPHA = 0.6*mix(1.0, 0.0, rsq*4.0);
-	//ALBEDO *= mix(vec3(1.0, 1.0, 1.0), bordercolor, rsq*3.0);
-	ALPHA *= mix(1.0, 0.0, abs(cos((1.0+rsq*8.0))));
-	//ALBEDO.g = mix(0.0, 1.0, abs(cos((1.0+rsq*8.0))));
-	//ALPHA *= mix(1.0, 0.0, rsq*4.0);
-}
-"
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_o058f"]
-resource_local_to_scene = true
-render_priority = 0
-shader = SubResource("Shader_wuf5l")
-shader_parameter/albedo = Color(0.921569, 0.709804, 0.427451, 0.776471)
-shader_parameter/point_size = 15.0
-shader_parameter/colormixweight = 0.05
-
-[sub_resource type="PointMesh" id="PointMesh_bu86o"]
-resource_local_to_scene = true
-material = SubResource("ShaderMaterial_o058f")
-
-[sub_resource type="QuadMesh" id="QuadMesh_srmgh"]
-
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_v4s43"]
-shading_mode = 0
-albedo_texture = ExtResource("23_kf8tx")
 
 [node name="Main" type="Node3D"]
 script = ExtResource("1_cthjx")
@@ -184,60 +89,4 @@ physics = SubResource("Resource_cbi6m")
 [node name="XRSimulator" parent="XROrigin3D" instance=ExtResource("10_kug0p")]
 xr_origin = NodePath("..")
 
-[node name="Room" parent="." instance=ExtResource("13_5eumo")]
-
-[node name="DoorCamera" parent="." instance=ExtResource("20_iigjo")]
-transform = Transform3D(0.970628, 0.240584, 0, -0.240584, 0.970628, 0, 0, 0, 1, -0.319651, 1.85285, -0.944086)
-
-[node name="VapourSource" parent="." instance=ExtResource("20_oi0qg")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0270998, 1.21692, -1.80477)
-
-[node name="GPUParticles3D" parent="VapourSource" index="1"]
-process_material = SubResource("ParticleProcessMaterial_qjtok")
-draw_pass_1 = SubResource("PointMesh_bu86o")
-
-[node name="SphereCollider" parent="." instance=ExtResource("21_i6ogd")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.370296, 1.3329, -2.4178)
-
-[node name="SphereCollider2" parent="." instance=ExtResource("21_i6ogd")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.59556, 1.3329, -2.4178)
-
-[node name="SphereCollider3" parent="." instance=ExtResource("21_i6ogd")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.82283, 1.3329, -2.4178)
-
-[node name="SphereAttractor" parent="." instance=ExtResource("22_g0p67")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.9916, 0.686416, -1.43787)
-
-[node name="SphereAttractor3" parent="." instance=ExtResource("22_g0p67")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.57522, 0.686416, -1.43787)
-
-[node name="SphereAttractor2" parent="." instance=ExtResource("22_g0p67")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.81653, 0.686416, -1.43787)
-
-[node name="BoxAccelerator" parent="." instance=ExtResource("22_3jrln")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.46913, 0.551277, 0)
-
-[node name="BoxAccelerator2" parent="." instance=ExtResource("22_3jrln")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.22284, 0.551277, 0)
-
-[node name="BoxAccelerator3" parent="." instance=ExtResource("22_3jrln")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.92666, 0.551277, 0)
-
-[node name="BoxAccelerator4" parent="." instance=ExtResource("22_3jrln")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.4989, 0.622275, -0.0473732)
-
-[node name="Picture" type="Node3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.50848, 2.17285, -3.55136)
-
-[node name="CSGBox3D" type="CSGBox3D" parent="Picture"]
-size = Vector3(1.1, 1.1, 0.05)
-
-[node name="CSGBox3D" type="CSGBox3D" parent="Picture/CSGBox3D"]
-operation = 2
-size = Vector3(1, 1, 0.2)
-
-[node name="Canvas" type="MeshInstance3D" parent="Picture"]
-mesh = SubResource("QuadMesh_srmgh")
-surface_material_override/0 = SubResource("StandardMaterial3D_v4s43")
-
-[editable path="VapourSource"]
+[node name="Level1" parent="." instance=ExtResource("13_4v33y")]

@@ -1,10 +1,18 @@
-[gd_scene load_steps=11 format=3 uid="uid://cw8ba26q0dasa"]
+[gd_scene load_steps=14 format=3 uid="uid://cw8ba26q0dasa"]
 
 [ext_resource type="Shader" uid="uid://b5xmy0gsmqbam" path="res://rooms/holodeck_map_shader.tres" id="1_atmi4"]
+[ext_resource type="Script" path="res://rooms/BaseRoom.gd" id="1_jfj10"]
 [ext_resource type="Texture2D" uid="uid://dd6n51g6uam2k" path="res://rooms/grid_glow.png" id="2_harrv"]
 [ext_resource type="Material" uid="uid://c5no820h1vdbl" path="res://rooms/holodeck_grid.material" id="3_7eyfm"]
 [ext_resource type="PackedScene" uid="uid://cjyilbm4ucc7s" path="res://addons/godot-xr-tools/objects/climbable.tscn" id="4_gthei"]
 [ext_resource type="PackedScene" uid="uid://bb2dqe3rnux7n" path="res://objects/DoorCamera.tscn" id="5_qdiph"]
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_n5a7a"]
+size = Vector2(0.3, 0.3)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ancea"]
+cull_mode = 2
+albedo_color = Color(1, 1, 0, 1)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_ebfcv"]
 size = Vector3(10, 1, 10)
@@ -23,10 +31,15 @@ size = Vector2(10, 10)
 
 [sub_resource type="CylinderMesh" id="CylinderMesh_5qnka"]
 
-[node name="Room" type="Node3D"]
+[node name="BaseRoom" type="Node3D"]
+script = ExtResource("1_jfj10")
 
 [node name="SpawnPoint" type="Node3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.49743, 2.50935, 1.77955)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="SpawnPoint"]
+mesh = SubResource("PlaneMesh_n5a7a")
+surface_material_override/0 = SubResource("StandardMaterial3D_ancea")
 
 [node name="Floor" type="StaticBody3D" parent="."]
 
