@@ -1,0 +1,119 @@
+[gd_scene load_steps=11 format=3 uid="uid://bhr0hku266fqw"]
+
+[ext_resource type="PackedScene" uid="uid://c8l60rnugru40" path="res://addons/godot-xr-tools/objects/pickable.tscn" id="1_2vbmh"]
+
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_2jnyr"]
+height = 0.2
+radius = 0.25
+
+[sub_resource type="Curve" id="Curve_doi5e"]
+_data = [Vector2(0.00191572, 0.984988), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_q48xl"]
+curve = SubResource("Curve_doi5e")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_a141k"]
+resource_local_to_scene = true
+emission_shape = 6
+emission_ring_axis = Vector3(0, 1, 0)
+emission_ring_height = 0.0
+emission_ring_radius = 0.2
+emission_ring_inner_radius = 0.1
+direction = Vector3(0, 1, 0)
+spread = 0.0
+initial_velocity_min = 0.5
+initial_velocity_max = 0.6
+gravity = Vector3(0, 0, 0)
+alpha_curve = SubResource("CurveTexture_q48xl")
+collision_mode = 1
+collision_friction = 0.2
+collision_bounce = 0.5
+
+[sub_resource type="Shader" id="Shader_offhm"]
+resource_local_to_scene = true
+code = "shader_type spatial;
+render_mode world_vertex_coords,blend_mix,depth_draw_opaque,cull_back,diffuse_burley,specular_schlick_ggx;
+
+uniform vec4 albedo : source_color;
+uniform float point_size : hint_range(0,128) = 15.0;
+
+const vec3 closecol = vec3(1,1,0);
+const vec3 farcol = vec3(0.1,1.0,1.0);
+const float fardist = 6.0;
+const float fardisttaper = 2.0;
+const float fardisttaperfac = -(fardisttaper*((fardisttaper + fardist)))/fardist;
+uniform float colormixweight = 0.05; 
+const vec3 bordercolor = vec3(0.1, 0.1, 0.2);
+
+void vertex() {
+	float distcamera = length(CAMERA_POSITION_WORLD - VERTEX); 
+	POINT_SIZE = point_size/distcamera;
+
+	float mixval = (1.0/(distcamera + fardisttaper) - 1.0/fardisttaper)*fardisttaperfac;
+	vec3 distancecolor = mix(closecol, farcol, mixval);
+	COLOR.rgb = mix(distancecolor, COLOR.rgb, colormixweight);
+	NORMAL = vec3(0.0,1.0,0.0);
+}
+
+
+void fragment() {
+	vec2 base_uv = UV;
+	ALBEDO = albedo.rgb * COLOR.rgb;
+	METALLIC = 0.0;
+	ROUGHNESS = 0.0;
+	SPECULAR = 0.0;
+//	ALPHA *= albedo.a * COLOR.a;
+
+	float rsq = (POINT_COORD.x-0.5)*(POINT_COORD.x-0.5) + (POINT_COORD.y-0.5)*(POINT_COORD.y-0.5);
+	if (rsq > 0.25+point_size*0.001) 
+		discard;
+
+	//ALPHA = 0.6*mix(1.0, 0.0, rsq*4.0);
+	//ALBEDO *= mix(vec3(1.0, 1.0, 1.0), bordercolor, rsq*3.0);
+	ALPHA *= mix(1.0, 0.0, abs(cos((1.0+rsq*8.0))));
+	//ALBEDO.g = mix(0.0, 1.0, abs(cos((1.0+rsq*8.0))));
+	//ALPHA *= mix(1.0, 0.0, rsq*4.0);
+}
+"
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_dtmmx"]
+resource_local_to_scene = true
+render_priority = 0
+shader = SubResource("Shader_offhm")
+shader_parameter/albedo = Color(0.211765, 0.709804, 0.427451, 0.603922)
+shader_parameter/point_size = 15.0
+shader_parameter/colormixweight = 0.05
+
+[sub_resource type="PointMesh" id="PointMesh_7vl6v"]
+resource_local_to_scene = true
+material = SubResource("ShaderMaterial_dtmmx")
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_tt03m"]
+top_radius = 0.25
+bottom_radius = 0.25
+height = 0.2
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_q33vq"]
+albedo_color = Color(0.729412, 0.388235, 0.121569, 1)
+metallic = 0.57
+roughness = 0.17
+
+[node name="VapourSource" instance=ExtResource("1_2vbmh")]
+
+[node name="CollisionShape3D" parent="." index="0"]
+shape = SubResource("CylinderShape3D_2jnyr")
+
+[node name="GPUParticles3D" type="GPUParticles3D" parent="." index="1"]
+transform = Transform3D(1, -2.98023e-08, 0, 2.98023e-08, 1, 0, 0, 0, 1, 0, 0, 0)
+layers = 1025
+amount = 16800
+lifetime = 6.0
+explosiveness = 0.1
+draw_order = 3
+process_material = SubResource("ParticleProcessMaterial_a141k")
+draw_pass_1 = SubResource("PointMesh_7vl6v")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="." index="2"]
+mesh = SubResource("CylinderMesh_tt03m")
+surface_material_override/0 = SubResource("StandardMaterial3D_q33vq")
