@@ -1,7 +1,7 @@
 extends Node3D
 
 
-var sceneorder = [ "TheLobby", "InvisibleParticles", "EasyIntro", "FocusSphere" ]
+var sceneorder = [ "TheLobby", "BlockingWall", "InvisibleParticles", "EasyIntro", "FocusSphere" ]
 var currentsceneindex = 0
 var current_scene = null
 

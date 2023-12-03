@@ -1,9 +1,10 @@
-[gd_scene load_steps=16 format=3 uid="uid://bb2dqe3rnux7n"]
+[gd_scene load_steps=17 format=3 uid="uid://bb2dqe3rnux7n"]
 
 [ext_resource type="PackedScene" uid="uid://c8l60rnugru40" path="res://addons/godot-xr-tools/objects/pickable.tscn" id="1_mai3m"]
 [ext_resource type="Script" path="res://objects/DoorTarget.gd" id="2_w2fis"]
 [ext_resource type="AudioStream" uid="uid://bjjiko4jjimxr" path="res://sounds/bell_01.ogg" id="3_maptt"]
 [ext_resource type="AudioStream" uid="uid://dfekr6p7mxvkp" path="res://sounds/weird_02.ogg" id="4_iprav"]
+[ext_resource type="PackedScene" uid="uid://c3rnpbdlvqbvh" path="res://objects/star2.gltf" id="5_7nt4x"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_xxi68"]
 size = Vector3(0.5, 0.5, 0.6)
@@ -128,5 +129,9 @@ emission_angle_enabled = true
 [node name="OpenSound" type="AudioStreamPlayer3D" parent="Quarters" index="6"]
 stream = ExtResource("4_iprav")
 volume_db = -20.0
+
+[node name="star2" parent="." index="6" instance=ExtResource("5_7nt4x")]
+transform = Transform3D(0.2, 0, 0, 0, 0.2, 0, 0, 0, 0.2, 0, 0, 0)
+visible = false
 
 [connection signal="action_pressed" from="." to="Quarters" method="_on_door_camera_action_pressed"]

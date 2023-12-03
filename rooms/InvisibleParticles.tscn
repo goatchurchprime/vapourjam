@@ -1,0 +1,158 @@
+[gd_scene load_steps=21 format=3 uid="uid://0e5ufxb6hvjf"]
+
+[ext_resource type="PackedScene" uid="uid://cw8ba26q0dasa" path="res://rooms/BaseRoom.tscn" id="1_m17tx"]
+[ext_resource type="Script" path="res://rooms/roompolyshape.gd" id="2_ntffd"]
+[ext_resource type="PackedScene" uid="uid://dafw3cumcf23j" path="res://rooms/octogonroom.gltf" id="3_fck35"]
+[ext_resource type="PackedScene" uid="uid://dstwgq7sc08wb" path="res://objects/FramedPicture.tscn" id="4_p4ji5"]
+[ext_resource type="Texture2D" uid="uid://cvnnc8v8fl3v5" path="res://pictures/circletensegrity.jpg" id="5_dpobe"]
+[ext_resource type="Texture2D" uid="uid://02kpwmjk5bf5" path="res://pictures/hoodiegirraffe.jpg" id="6_f7t33"]
+[ext_resource type="Shader" path="res://materials/vapour.gdshader" id="7_pwvlt"]
+[ext_resource type="PackedScene" uid="uid://oafuaon5kmv4" path="res://objects/BoxAccelerator.tscn" id="8_i0lp1"]
+[ext_resource type="PackedScene" uid="uid://bptwjfkavah45" path="res://objects/SphereAttractor.tscn" id="9_sd7sk"]
+[ext_resource type="PackedScene" uid="uid://bdmiors20i42g" path="res://objects/emitter_beaker.glb" id="10_bynt3"]
+
+[sub_resource type="ConcavePolygonShape3D" id="ConcavePolygonShape3D_auyxk"]
+backface_collision = true
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_iu2yh"]
+resource_local_to_scene = true
+shading_mode = 0
+albedo_texture = ExtResource("5_dpobe")
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_v7tkj"]
+resource_local_to_scene = true
+shading_mode = 0
+albedo_texture = ExtResource("6_f7t33")
+
+[sub_resource type="Curve" id="Curve_aq8le"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(0.0172414, 0), 0.0, 0.0, 0, 0, Vector2(0.82567, 0), 0.0, 0.0, 0, 0, Vector2(0.883142, 1), 0.0, 0.0, 0, 0, Vector2(0.982759, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 6
+
+[sub_resource type="CurveTexture" id="CurveTexture_q48xl"]
+curve = SubResource("Curve_aq8le")
+
+[sub_resource type="Gradient" id="Gradient_ss0jl"]
+offsets = PackedFloat32Array(0, 0.453125, 0.838542, 0.901042)
+colors = PackedColorArray(0.858824, 0.717647, 0.129412, 1, 0.858824, 0.0431373, 0.129412, 1, 0.858824, 0.0431373, 0.129412, 1, 0.0627451, 0.862745, 0.129412, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_c5noq"]
+gradient = SubResource("Gradient_ss0jl")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_fiief"]
+resource_local_to_scene = true
+emission_shape = 6
+emission_ring_axis = Vector3(0, 1, 0)
+emission_ring_height = 0.0
+emission_ring_radius = 0.2
+emission_ring_inner_radius = 0.0
+direction = Vector3(0, 1, 0)
+spread = 0.0
+initial_velocity_min = 0.7
+initial_velocity_max = 0.8
+gravity = Vector3(0, 0, 0)
+color_ramp = SubResource("GradientTexture1D_c5noq")
+alpha_curve = SubResource("CurveTexture_q48xl")
+collision_mode = 1
+collision_friction = 0.2
+collision_bounce = 0.5
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_dtmmx"]
+render_priority = 0
+shader = ExtResource("7_pwvlt")
+shader_parameter/albedo = Color(1, 1, 1, 0.901961)
+shader_parameter/point_size = 20.0
+shader_parameter/farcol = Vector3(0.1, 0.1, 0.1)
+shader_parameter/colormixweight = 0.5
+
+[sub_resource type="PointMesh" id="PointMesh_ynuoc"]
+resource_local_to_scene = true
+material = SubResource("ShaderMaterial_dtmmx")
+
+[node name="InvisibleParticles" instance=ExtResource("1_m17tx")]
+
+[node name="SpawnPoint" parent="." index="0"]
+transform = Transform3D(-0.592393, 0, -0.80565, 0, 1, 0, 0.80565, 0, -0.592393, -2.13437, 0.388373, -3.07149)
+
+[node name="DoorCamera" parent="DoorCameras" index="0"]
+transform = Transform3D(-0.324991, 0.191396, 0.926147, 0.507463, 0.861673, 1.49012e-08, -0.798037, 0.469986, -0.377162, 5.12767, 0.788416, -1.97127)
+
+[node name="ExitDoor" parent="." index="3"]
+transform = Transform3D(0.0548286, 0, -0.998496, 0, 1, 0, 0.998496, 0, 0.0548286, 5.5302, 1.21207, -0.152312)
+
+[node name="StaticBody3D" type="StaticBody3D" parent="." index="4"]
+script = ExtResource("2_ntffd")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="StaticBody3D" index="0"]
+shape = SubResource("ConcavePolygonShape3D_auyxk")
+
+[node name="octogonroom" parent="StaticBody3D" index="1" instance=ExtResource("3_fck35")]
+
+[node name="FramedPicture" parent="." index="5" instance=ExtResource("4_p4ji5")]
+transform = Transform3D(3.4, 0, 0, 0, 3.4, 0, 0, 0, 1, 0, 2.04549, -5.65694)
+
+[node name="Canvas" parent="FramedPicture" index="1"]
+surface_material_override/0 = SubResource("StandardMaterial3D_iu2yh")
+
+[node name="FramedPicture2" parent="." index="6" instance=ExtResource("4_p4ji5")]
+transform = Transform3D(-3.4, 0, -1.50996e-07, 0, 3.4, 0, 5.13386e-07, 0, -1, 6.26562e-07, 2.04549, 5.62685)
+
+[node name="Canvas" parent="FramedPicture2" index="1"]
+transform = Transform3D(1, 0, 2.84217e-14, 0, 1, 0, -2.84217e-14, 0, 1, 0, 0, 0)
+surface_material_override/0 = SubResource("StandardMaterial3D_v7tkj")
+
+[node name="VapourSource" parent="." index="7"]
+transform = Transform3D(0.890963, 0.424828, -0.160334, 0.0198023, 0.316411, 0.948415, 0.453644, -0.848178, 0.273498, -0.346884, 0.927561, 1.60705)
+
+[node name="CollisionShape3D" parent="VapourSource" index="0"]
+transform = Transform3D(1, 0, -7.45058e-09, 0, 1, 0, 0, 0, 1, 0, 0, 0)
+
+[node name="GPUParticles3D" parent="VapourSource" index="1"]
+transform = Transform3D(1, 0, -1.49012e-08, 0, 1, 0, 0, -2.98023e-08, 1, 0, 0, 0)
+process_material = SubResource("ParticleProcessMaterial_fiief")
+draw_pass_1 = SubResource("PointMesh_ynuoc")
+
+[node name="BoxAccelerator" parent="." index="8" instance=ExtResource("8_i0lp1")]
+transform = Transform3D(0.685844, 0, 0.727749, 0, 1, 0, -0.727749, 0, 0.685844, 0, 0.731292, 0)
+
+[node name="BoxAccelerator2" parent="." index="9" instance=ExtResource("8_i0lp1")]
+transform = Transform3D(0.685844, 0, 0.727749, 0, 1, 0, -0.727749, 0, 0.685844, -1.4665, 0.861322, 0)
+
+[node name="SphereAttractor" parent="." index="10" instance=ExtResource("9_sd7sk")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.809489, -3.81117)
+
+[node name="SphereAttractor2" parent="." index="11" instance=ExtResource("9_sd7sk")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.809489, -2.22953)
+
+[node name="GPUParticlesAttractorSphere3D" parent="SphereAttractor2" index="1"]
+strength = 0.4
+
+[node name="emitter_beaker" parent="." index="12" instance=ExtResource("10_bynt3")]
+transform = Transform3D(-0.882135, 0, 0.470997, 0, 1, 0, -0.470997, 0, -0.882135, 2.3878, 0, 0.967854)
+
+[node name="Flask 2_002" parent="emitter_beaker" index="0"]
+transform = Transform3D(0.231286, 0.0188196, -0.0144739, -0.0188196, 0.0589142, -0.224124, -0.0144739, 0.224124, 0.0601296, 2.179, 0.936, -1.934)
+visible = false
+
+[node name="Circle_028" parent="emitter_beaker" index="1"]
+transform = Transform3D(0.216395, 0.0267222, -0.0135421, -0.0176079, 0.0836531, -0.209695, -0.0135421, 0.318237, 0.0562582, 2.193, 0.961, -1.833)
+
+[node name="NurbsPath" parent="emitter_beaker" index="2"]
+transform = Transform3D(0.187488, -0.00150528, 0.0331143, 0.00152858, 0.19039, 0, -0.0331132, 0.000265856, 0.187494, 2.478, 1.00002, -1.866)
+
+[node name="NurbsPath_001" parent="emitter_beaker" index="3"]
+transform = Transform3D(0, 0.190396, 0, -0.732547, 0, 0, 0, 0, 0.190396, 2.79362, 1.80005, -1.91874)
+
+[node name="Circle_029" parent="emitter_beaker" index="4"]
+transform = Transform3D(0.0361287, 0, 0.00834078, 0, 0.0514134, 0, -0.00834078, 0, 0.0361287, 2.795, 1.02, -1.921)
+
+[node name="Circle_030" parent="emitter_beaker" index="6"]
+transform = Transform3D(1.0696e-08, 0.0871725, 0.0112074, -0.0598166, 1.58687e-08, 1.78267e-09, 0, -0.0166273, 0.0587573, 2.89, 1.004, -1.939)
+
+[editable path="StaticBody3D/octogonroom"]
+[editable path="FramedPicture"]
+[editable path="FramedPicture2"]
+[editable path="VapourSource"]
+[editable path="VapourSource/flask_4"]
+[editable path="SphereAttractor"]
+[editable path="SphereAttractor2"]
+[editable path="emitter_beaker"]

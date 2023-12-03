@@ -1,0 +1,44 @@
+[gd_scene load_steps=8 format=3 uid="uid://dpvkqkmdj3bml"]
+
+[ext_resource type="PackedScene" uid="uid://c8l60rnugru40" path="res://addons/godot-xr-tools/objects/pickable.tscn" id="1_kbjmb"]
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_4qem2"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_bqo5p"]
+size = Vector3(2, 1, 0.2)
+
+[sub_resource type="Gradient" id="Gradient_3bjpn"]
+offsets = PackedFloat32Array(0, 0.70892, 1)
+colors = PackedColorArray(0, 0, 0, 1, 0.239089, 0.239089, 0.239089, 1, 1, 1, 1, 1)
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_yiw18"]
+domain_warp_enabled = true
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_yfhff"]
+seamless = true
+color_ramp = SubResource("Gradient_3bjpn")
+noise = SubResource("FastNoiseLite_yiw18")
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_inl67"]
+albedo_color = Color(0.278431, 0.0117647, 0.109804, 0.443137)
+emission_enabled = true
+emission = Color(0.129412, 0, 0, 1)
+emission_texture = SubResource("NoiseTexture2D_yfhff")
+uv1_scale = Vector3(20, 10, 1)
+
+[node name="BoxCollider" instance=ExtResource("1_kbjmb")]
+collision_layer = 65543
+collision_mask = 0
+freeze = true
+enabled = false
+picked_up_layer = 65537
+
+[node name="CollisionShape3D" parent="." index="0"]
+shape = SubResource("SphereShape3D_4qem2")
+
+[node name="GPUParticlesCollisionBox3D" type="GPUParticlesCollisionBox3D" parent="." index="1"]
+size = Vector3(2, 1, 0.2)
+
+[node name="BoxMesh" type="MeshInstance3D" parent="." index="2"]
+mesh = SubResource("BoxMesh_bqo5p")
+surface_material_override/0 = SubResource("StandardMaterial3D_inl67")

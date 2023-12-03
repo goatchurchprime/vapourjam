@@ -10,8 +10,8 @@ height = 0.2
 radius = 0.25
 
 [sub_resource type="Curve" id="Curve_aq8le"]
-_data = [Vector2(0.00191572, 0.984988), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
-point_count = 2
+_data = [Vector2(0.00191572, 0.984988), 0.0, 0.0, 0, 0, Vector2(0.630268, 0.884911), -0.565935, -0.565935, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 3
 
 [sub_resource type="CurveTexture" id="CurveTexture_q48xl"]
 curve = SubResource("Curve_aq8le")

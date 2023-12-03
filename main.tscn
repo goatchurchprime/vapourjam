@@ -1,4 +1,4 @@
-[gd_scene load_steps=22 format=3 uid="uid://cbydosia47duf"]
+[gd_scene load_steps=26 format=3 uid="uid://cbydosia47duf"]
 
 [ext_resource type="PackedScene" uid="uid://bq86r4yll8po" path="res://addons/godot-xr-tools/hands/scenes/lowpoly/left_fullglove_low.tscn" id="1_ckbsl"]
 [ext_resource type="Script" path="res://main.gd" id="1_cthjx"]
@@ -6,12 +6,15 @@
 [ext_resource type="PackedScene" uid="uid://xqimcf20s2jp" path="res://addons/godot-xr-tools/hands/scenes/lowpoly/right_fullglove_low.tscn" id="2_21ao1"]
 [ext_resource type="Shader" path="res://addons/godot-xr-tools/staging/fade.gdshader" id="2_icgkg"]
 [ext_resource type="PackedScene" uid="uid://bl2nuu3qhlb5k" path="res://addons/godot-xr-tools/functions/movement_direct.tscn" id="3_mbhq1"]
+[ext_resource type="Texture2D" uid="uid://1824fjuirf3d" path="res://pictures/treesskybox.png" id="3_rw55r"]
 [ext_resource type="PackedScene" uid="uid://diyu06cw06syv" path="res://addons/godot-xr-tools/player/player_body.tscn" id="4_fr5tq"]
 [ext_resource type="PackedScene" uid="uid://b4ysuy43poobf" path="res://addons/godot-xr-tools/functions/function_pickup.tscn" id="5_vq85m"]
 [ext_resource type="PackedScene" uid="uid://b6bk2pj8vbj28" path="res://addons/godot-xr-tools/functions/movement_turn.tscn" id="5_yuk0q"]
 [ext_resource type="PackedScene" uid="uid://0xlsitpu17r1" path="res://addons/godot-xr-tools/functions/movement_footstep.tscn" id="7_ob6rw"]
 [ext_resource type="PackedScene" uid="uid://c2q5phg8w08o" path="res://addons/godot-xr-tools/functions/movement_jump.tscn" id="8_3e0hb"]
+[ext_resource type="Script" path="res://addons/godot-xr-tools/audio/surface_audio_type.gd" id="8_o5boh"]
 [ext_resource type="PackedScene" uid="uid://bxm1ply47vaan" path="res://addons/godot-xr-tools/functions/movement_climb.tscn" id="9_6f5lv"]
+[ext_resource type="AudioStream" uid="uid://c7wh7vrk0rgtl" path="res://default_footstep.wav" id="9_ci6sm"]
 [ext_resource type="Script" path="res://addons/godot-xr-tools/overrides/ground_physics_settings.gd" id="9_qng54"]
 [ext_resource type="PackedScene" uid="uid://ctltchlf2j2r4" path="res://addons/xr-simulator/XRSimulator.tscn" id="10_kug0p"]
 [ext_resource type="PackedScene" uid="uid://c8igqygjx4esl" path="res://rooms/TheLobby.tscn" id="14_5nq5v"]
@@ -25,14 +28,22 @@ render_priority = 0
 shader = ExtResource("2_icgkg")
 shader_parameter/alpha = 0.0
 
-[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_3bvb1"]
+[sub_resource type="PanoramaSkyMaterial" id="PanoramaSkyMaterial_1wuwa"]
+panorama = ExtResource("3_rw55r")
 
 [sub_resource type="Sky" id="Sky_s1a1u"]
-sky_material = SubResource("ProceduralSkyMaterial_3bvb1")
+sky_material = SubResource("PanoramaSkyMaterial_1wuwa")
 
 [sub_resource type="Environment" id="Environment_mt1qa"]
 background_mode = 2
 sky = SubResource("Sky_s1a1u")
+
+[sub_resource type="Resource" id="Resource_bxati"]
+script = ExtResource("8_o5boh")
+name = ""
+walk_sounds = Array[AudioStream]([ExtResource("9_ci6sm")])
+walk_pitch_minimum = 0.8
+walk_pitch_maximum = 1.2
 
 [sub_resource type="Resource" id="Resource_cbi6m"]
 script = ExtResource("9_qng54")
@@ -82,6 +93,7 @@ strafe = true
 [node name="FunctionPickup" parent="XROrigin3D/LeftHand" instance=ExtResource("5_vq85m")]
 
 [node name="MovementFootstep" parent="XROrigin3D/LeftHand" instance=ExtResource("7_ob6rw")]
+default_surface_audio_type = SubResource("Resource_bxati")
 
 [node name="RightHand" type="XRController3D" parent="XROrigin3D"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.5, 1, -0.5)
