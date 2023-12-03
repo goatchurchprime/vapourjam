@@ -31,7 +31,6 @@ size = Vector2(10, 10)
 script = ExtResource("1_jfj10")
 
 [node name="SpawnPoint" type="Node3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.49743, 2.50935, 1.77955)
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="SpawnPoint"]
 mesh = SubResource("PlaneMesh_n5a7a")

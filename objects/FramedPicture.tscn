@@ -6,7 +6,6 @@
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_v4s43"]
 resource_local_to_scene = true
-cull_mode = 2
 shading_mode = 0
 albedo_texture = ExtResource("1_jka0a")
 
