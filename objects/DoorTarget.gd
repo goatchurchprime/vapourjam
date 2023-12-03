@@ -1,7 +1,7 @@
 extends Node3D
 
 
-@export var colourindensitythreshold = 0.5
+@export var colourindensitythreshold = 0.4
 
 signal doorcamera_unlocked(doorcameranode)
 

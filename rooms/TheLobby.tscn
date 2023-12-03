@@ -17,6 +17,9 @@ albedo_texture = ExtResource("4_u5lth")
 
 [node name="TheLobby" instance=ExtResource("1_tnx3d")]
 
+[node name="SpawnPoint" parent="." index="0"]
+transform = Transform3D(0.999999, 0, -0.00167549, 0, 1, 0, 0.00167549, 0, 0.999999, 0, 0, 0)
+
 [node name="DoorCameras" parent="." index="2"]
 visible = false
 

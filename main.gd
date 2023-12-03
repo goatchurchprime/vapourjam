@@ -1,7 +1,7 @@
 extends Node3D
 
 
-var sceneorder = [ "TheLobby", "EasyIntro" ]
+var sceneorder = [ "TheLobby", "FocusSphere", "EasyIntro" ]
 var currentsceneindex = 0
 var current_scene = null
 

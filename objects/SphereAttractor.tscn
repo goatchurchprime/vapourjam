@@ -20,11 +20,9 @@ freeze = true
 shape = SubResource("SphereShape3D_22e5o")
 
 [node name="GPUParticlesAttractorSphere3D" type="GPUParticlesAttractorSphere3D" parent="." index="1"]
-attenuation = 0.0669859
-radius = 0.5
+attenuation = 0.554785
 
 [node name="SphereMesh" type="MeshInstance3D" parent="." index="2"]
-visible = false
 mesh = SubResource("SphereMesh_0wvwh")
 surface_material_override/0 = SubResource("StandardMaterial3D_y05lm")
 
