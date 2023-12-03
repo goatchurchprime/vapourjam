@@ -52,6 +52,7 @@ surface_material_override/0 = SubResource("StandardMaterial3D_ib1x6")
 
 [node name="FrameMesh" type="MeshInstance3D" parent="XRToolsInteractableAreaButton"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.04)
+visible = false
 mesh = SubResource("BoxMesh_sayiw")
 surface_material_override/0 = SubResource("StandardMaterial3D_5ceqo")
 
