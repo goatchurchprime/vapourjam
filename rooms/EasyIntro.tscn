@@ -20,8 +20,11 @@ albedo_texture = ExtResource("5_lv1bi")
 [node name="SpawnPoint" parent="." index="0"]
 transform = Transform3D(-0.0360333, 0, -0.999351, 0, 1, 0, 0.999351, 0, -0.0360333, -3.78195, 0.123823, 0.807735)
 
+[node name="DoorCamera" parent="DoorCameras" index="0"]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 5.62421, 2.84565, -0.246451)
+
 [node name="ExitDoor" parent="." index="3"]
-transform = Transform3D(0.717373, 0, -0.696689, 0, 1, 0, 0.696689, 0, 0.717373, 3.88816, 1.21207, -4.18233)
+transform = Transform3D(0.0548286, 0, -0.998496, 0, 1, 0, 0.998496, 0, 0.0548286, 5.5302, 1.21207, -0.152312)
 
 [node name="StaticBody3D" type="StaticBody3D" parent="." index="4"]
 script = ExtResource("2_nplkx")
@@ -40,6 +43,10 @@ transform = Transform3D(-3, 0, -8.74228e-08, 0, 3, 0, 2.62268e-07, 0, -1, 6.2656
 [node name="Canvas" parent="FramedPicture2" index="1"]
 transform = Transform3D(-1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
 surface_material_override/0 = SubResource("StandardMaterial3D_v7tkj")
+
+[node name="VapourSource" parent="." index="7"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.1148, 0.304272, 1.15508)
+enabled = false
 
 [node name="BoxAccelerator" parent="." index="8" instance=ExtResource("6_i1ft6")]
 transform = Transform3D(0.685844, 0, 0.727749, 0, 1, 0, -0.727749, 0, 0.685844, 0, 0.731292, 0)
