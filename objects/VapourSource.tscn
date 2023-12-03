@@ -64,7 +64,7 @@ shape = SubResource("CylinderShape3D_2jnyr")
 [node name="GPUParticles3D" type="GPUParticles3D" parent="." index="1"]
 transform = Transform3D(1, -2.98023e-08, 0, 2.98023e-08, 1, 0, 0, 0, 1, 0, 0, 0)
 layers = 1025
-amount = 16800
+amount = 21000
 lifetime = 8.0
 explosiveness = 0.1
 draw_order = 3

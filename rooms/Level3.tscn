@@ -1,0 +1,48 @@
+[gd_scene load_steps=9 format=3 uid="uid://b6cy080jovbqj"]
+
+[ext_resource type="PackedScene" uid="uid://cw8ba26q0dasa" path="res://rooms/BaseRoom.tscn" id="1_n48uk"]
+[ext_resource type="Script" path="res://rooms/roompolyshape.gd" id="2_nplkx"]
+[ext_resource type="PackedScene" uid="uid://ctibliguk32ye" path="res://objects/room_poly.glb" id="3_p776g"]
+[ext_resource type="PackedScene" uid="uid://dstwgq7sc08wb" path="res://objects/FramedPicture.tscn" id="4_suopj"]
+[ext_resource type="Texture2D" uid="uid://23jw6glyyp7w" path="res://pictures/cattensegrity.jpg" id="5_lv1bi"]
+[ext_resource type="PackedScene" uid="uid://oafuaon5kmv4" path="res://objects/BoxAccelerator.tscn" id="6_i1ft6"]
+
+[sub_resource type="ConcavePolygonShape3D" id="ConcavePolygonShape3D_auyxk"]
+backface_collision = true
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_v7tkj"]
+resource_local_to_scene = true
+shading_mode = 0
+albedo_texture = ExtResource("5_lv1bi")
+
+[node name="Level3" instance=ExtResource("1_n48uk")]
+
+[node name="SpawnPoint" parent="." index="0"]
+transform = Transform3D(-0.0360333, 0, -0.999351, 0, 1, 0, 0.999351, 0, -0.0360333, -5.06284, 0.123823, 0.76155)
+
+[node name="ExitDoor" parent="." index="3"]
+transform = Transform3D(0.717373, 0, -0.696689, 0, 1, 0, 0.696689, 0, 0.717373, 3.88816, 1.21207, -4.18233)
+
+[node name="StaticBody3D" type="StaticBody3D" parent="." index="4"]
+script = ExtResource("2_nplkx")
+
+[node name="room_poly" parent="StaticBody3D" index="0" instance=ExtResource("3_p776g")]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="StaticBody3D" index="1"]
+shape = SubResource("ConcavePolygonShape3D_auyxk")
+
+[node name="FramedPicture" parent="." index="5" instance=ExtResource("4_suopj")]
+transform = Transform3D(3, 0, 0, 0, 3, 0, 0, 0, 1, 0, 2.04549, -5.65694)
+
+[node name="FramedPicture2" parent="." index="6" instance=ExtResource("4_suopj")]
+transform = Transform3D(-3, 0, -8.74228e-08, 0, 3, 0, 2.62268e-07, 0, -1, 6.26562e-07, 2.04549, 5.62685)
+
+[node name="Canvas" parent="FramedPicture2" index="1"]
+transform = Transform3D(-1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
+surface_material_override/0 = SubResource("StandardMaterial3D_v7tkj")
+
+[node name="BoxAccelerator" parent="." index="8" instance=ExtResource("6_i1ft6")]
+transform = Transform3D(0.685844, 0, 0.727749, 0, 1, 0, -0.727749, 0, 0.685844, 0, 0.731292, 0)
+
+[editable path="StaticBody3D/room_poly"]
+[editable path="FramedPicture2"]

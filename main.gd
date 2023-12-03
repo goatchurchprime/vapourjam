@@ -3,7 +3,7 @@ extends Node3D
 @onready var current_scene = $Level1
 
 func currentsceneexited(button):
-	load_scene("res://rooms/Level2.tscn")
+	load_scene("res://rooms/Level3.tscn")
 
 func set_fade(p_value : float):
 	if p_value == 0.0:
