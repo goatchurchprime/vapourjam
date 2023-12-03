@@ -17,6 +17,7 @@ func _ready():
 	
 func currentsceneexited(button):
 	await fadeoutcurrentscene()
+	currentsceneindex += 1
 	if currentsceneindex >= len(sceneorder):
 		currentsceneindex = 0
 	loadnewcurrentscene("res://rooms/%s.tscn" % sceneorder[currentsceneindex])
@@ -35,7 +36,7 @@ func fadeoutcurrentscene():
 	if _tween:
 		_tween.kill()
 	_tween = get_tree().create_tween()
-	_tween.tween_method(set_fade, 0.0, 1.0, 0.15)
+	_tween.tween_method(set_fade, 0.0, 1.0, 0.25)
 	await _tween.finished
 	remove_child(current_scene)
 	current_scene.queue_free()
