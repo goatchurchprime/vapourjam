@@ -1,54 +1,122 @@
-[gd_scene load_steps=7 format=3 uid="uid://co2tisev5dyb"]
+[gd_scene load_steps=15 format=3 uid="uid://co2tisev5dyb"]
 
 [ext_resource type="PackedScene" uid="uid://cw8ba26q0dasa" path="res://rooms/BaseRoom.tscn" id="1_yy76j"]
 [ext_resource type="PackedScene" uid="uid://bhr0hku266fqw" path="res://objects/VapourSource.tscn" id="2_cbw5x"]
+[ext_resource type="PackedScene" uid="uid://ctibliguk32ye" path="res://objects/room_poly.glb" id="2_fl566"]
 [ext_resource type="PackedScene" uid="uid://brkefl6virxd3" path="res://objects/SphereCollider.tscn" id="3_yh8t6"]
 [ext_resource type="PackedScene" uid="uid://bptwjfkavah45" path="res://objects/SphereAttractor.tscn" id="4_seuw3"]
 [ext_resource type="PackedScene" uid="uid://oafuaon5kmv4" path="res://objects/BoxAccelerator.tscn" id="5_q5jg5"]
 [ext_resource type="PackedScene" uid="uid://dstwgq7sc08wb" path="res://objects/FramedPicture.tscn" id="6_n21iv"]
+[ext_resource type="PackedScene" uid="uid://bdmiors20i42g" path="res://objects/emitter_beaker.glb" id="8_c11fa"]
+[ext_resource type="Material" uid="uid://c5no820h1vdbl" path="res://rooms/holodeck_grid.material" id="9_4337u"]
+[ext_resource type="PackedScene" uid="uid://cjyilbm4ucc7s" path="res://addons/godot-xr-tools/objects/climbable.tscn" id="10_e4ue2"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_h0djo"]
+size = Vector3(10, 1, 10)
+
+[sub_resource type="QuadMesh" id="QuadMesh_ndeci"]
+size = Vector2(10, 10)
+
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_kt16f"]
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_mdnpt"]
 
 [node name="Level1" instance=ExtResource("1_yy76j")]
 
-[node name="SpawnPoint" parent="." index="0"]
+[node name="room_poly" parent="." index="0" instance=ExtResource("2_fl566")]
+visible = false
+
+[node name="SpawnPoint" parent="." index="1"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.85975, 2.09887, 3.34872)
 
-[node name="Climbable" parent="." index="5"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.98358, 1.14292, 3.34472)
-
-[node name="SphereCollider" parent="." index="6" instance=ExtResource("3_yh8t6")]
+[node name="SphereCollider" parent="." index="5" instance=ExtResource("3_yh8t6")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.370296, 1.3329, -2.4178)
 
-[node name="SphereCollider2" parent="." index="7" instance=ExtResource("3_yh8t6")]
+[node name="SphereCollider2" parent="." index="6" instance=ExtResource("3_yh8t6")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.59556, 1.3329, -2.4178)
 
-[node name="SphereCollider3" parent="." index="8" instance=ExtResource("3_yh8t6")]
+[node name="SphereCollider3" parent="." index="7" instance=ExtResource("3_yh8t6")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.82283, 1.3329, -2.4178)
 
-[node name="SphereAttractor" parent="." index="9" instance=ExtResource("4_seuw3")]
+[node name="SphereAttractor" parent="." index="8" instance=ExtResource("4_seuw3")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.9916, 0.686416, -1.43787)
 
-[node name="SphereAttractor3" parent="." index="10" instance=ExtResource("4_seuw3")]
+[node name="SphereAttractor3" parent="." index="9" instance=ExtResource("4_seuw3")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.57522, 0.686416, -1.43787)
 
-[node name="SphereAttractor2" parent="." index="11" instance=ExtResource("4_seuw3")]
+[node name="SphereAttractor2" parent="." index="10" instance=ExtResource("4_seuw3")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.81653, 0.686416, -1.43787)
 
-[node name="BoxAccelerator" parent="." index="12" instance=ExtResource("5_q5jg5")]
+[node name="BoxAccelerator" parent="." index="11" instance=ExtResource("5_q5jg5")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.46913, 0.551277, 0)
 
-[node name="BoxAccelerator2" parent="." index="13" instance=ExtResource("5_q5jg5")]
+[node name="BoxAccelerator2" parent="." index="12" instance=ExtResource("5_q5jg5")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.22284, 0.551277, 0)
 
-[node name="BoxAccelerator3" parent="." index="14" instance=ExtResource("5_q5jg5")]
+[node name="BoxAccelerator3" parent="." index="13" instance=ExtResource("5_q5jg5")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.92666, 0.551277, 0)
 
-[node name="BoxAccelerator4" parent="." index="15" instance=ExtResource("5_q5jg5")]
+[node name="BoxAccelerator4" parent="." index="14" instance=ExtResource("5_q5jg5")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.4989, 0.622275, -0.0473732)
 
-[node name="FramedPicture" parent="." index="16" instance=ExtResource("6_n21iv")]
+[node name="FramedPicture" parent="." index="15" instance=ExtResource("6_n21iv")]
 transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 1.50848, 2.17285, -4.40754)
 
-[node name="VapourSource" parent="." index="18" instance=ExtResource("2_cbw5x")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.98756, 0.586604, -0.319244)
+[node name="VapourSource" parent="." index="16" instance=ExtResource("2_cbw5x")]
+transform = Transform3D(0.765079, 0.643937, -7.45058e-09, -0.101134, 0.120159, -0.98759, -0.635945, 0.755584, 0.157055, -4.16181, 1.76762, -1.73675)
 
+[node name="emitter_beaker" parent="." index="17" instance=ExtResource("8_c11fa")]
+transform = Transform3D(0.588886, 0, 0.808216, 0, 1, 0, -0.808216, 0, 0.588886, -3.92498, 0, 1.09158)
+
+[node name="Flask 2_002" parent="emitter_beaker" index="0"]
+visible = false
+
+[node name="WallEast" type="StaticBody3D" parent="." index="18"]
+transform = Transform3D(-4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0, 1, 5, 4, 0)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="WallEast" index="0"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.5, 0)
+shape = SubResource("BoxShape3D_h0djo")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="WallEast" index="1"]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0)
+material_override = ExtResource("9_4337u")
+mesh = SubResource("QuadMesh_ndeci")
+
+[node name="WallWest" type="StaticBody3D" parent="." index="19"]
+transform = Transform3D(-4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0, 1, -5, 4, 0)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="WallWest" index="0"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.5, 0)
+shape = SubResource("BoxShape3D_h0djo")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="WallWest" index="1"]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0)
+material_override = ExtResource("9_4337u")
+mesh = SubResource("QuadMesh_ndeci")
+
+[node name="WallNorth" type="StaticBody3D" parent="." index="20"]
+transform = Transform3D(1.91069e-15, -4.37114e-08, -1, -1, -4.37114e-08, 0, -4.37114e-08, 1, -4.37114e-08, 0, 4, -5)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="WallNorth" index="0"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.5, 0)
+shape = SubResource("BoxShape3D_h0djo")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="WallNorth" index="1"]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0)
+material_override = ExtResource("9_4337u")
+mesh = SubResource("QuadMesh_ndeci")
+
+[node name="Climbable" parent="." index="21" instance=ExtResource("10_e4ue2")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.41109, 1.14292, 3.41622)
+
+[node name="CollisionShape3D" parent="Climbable" index="0"]
+shape = SubResource("CylinderShape3D_kt16f")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Climbable" index="1"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.0970397, 0)
+mesh = SubResource("CylinderMesh_mdnpt")
+
+[editable path="room_poly"]
+[editable path="emitter_beaker"]
 [editable path="Climbable"]

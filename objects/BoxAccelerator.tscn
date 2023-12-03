@@ -1,6 +1,7 @@
-[gd_scene load_steps=7 format=3 uid="uid://oafuaon5kmv4"]
+[gd_scene load_steps=8 format=3 uid="uid://oafuaon5kmv4"]
 
 [ext_resource type="PackedScene" uid="uid://c8l60rnugru40" path="res://addons/godot-xr-tools/objects/pickable.tscn" id="1_pxwr5"]
+[ext_resource type="PackedScene" uid="uid://b0u70sagoy2ji" path="res://objects/cylinder_tool.glb" id="2_0f6xf"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_wwnvs"]
 size = Vector3(0.5, 0.5, 1)
@@ -35,10 +36,15 @@ directionality = 1.0
 size = Vector3(0.5, 0.5, 1)
 
 [node name="BoxMesh" type="MeshInstance3D" parent="." index="2"]
+visible = false
 mesh = SubResource("BoxMesh_inq3d")
 surface_material_override/0 = SubResource("StandardMaterial3D_81n3b")
 
 [node name="ArrowMesh" type="MeshInstance3D" parent="." index="3"]
 transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0)
+visible = false
 mesh = SubResource("CylinderMesh_5akxp")
 surface_material_override/0 = SubResource("StandardMaterial3D_mh63c")
+
+[node name="cylinder_tool" parent="." index="4" instance=ExtResource("2_0f6xf")]
+transform = Transform3D(0.3, 0, 0, 0, -2.18557e-08, 0.3, 0, -0.5, -1.31134e-08, 0, 0, 0)

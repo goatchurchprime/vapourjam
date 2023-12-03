@@ -1,10 +1,8 @@
-[gd_scene load_steps=15 format=3 uid="uid://cw8ba26q0dasa"]
+[gd_scene load_steps=11 format=3 uid="uid://cw8ba26q0dasa"]
 
 [ext_resource type="Shader" uid="uid://b5xmy0gsmqbam" path="res://rooms/holodeck_map_shader.tres" id="1_atmi4"]
 [ext_resource type="Script" path="res://rooms/BaseRoom.gd" id="1_jfj10"]
 [ext_resource type="Texture2D" uid="uid://dd6n51g6uam2k" path="res://rooms/grid_glow.png" id="2_harrv"]
-[ext_resource type="Material" uid="uid://c5no820h1vdbl" path="res://rooms/holodeck_grid.material" id="3_7eyfm"]
-[ext_resource type="PackedScene" uid="uid://cjyilbm4ucc7s" path="res://addons/godot-xr-tools/objects/climbable.tscn" id="4_gthei"]
 [ext_resource type="PackedScene" uid="uid://bb2dqe3rnux7n" path="res://objects/DoorCamera.tscn" id="5_qdiph"]
 [ext_resource type="PackedScene" uid="uid://bvs7hsebp2xsv" path="res://objects/ExitDoor.tscn" id="7_v2o7d"]
 
@@ -28,10 +26,6 @@ shader_parameter/grid_texture = ExtResource("2_harrv")
 [sub_resource type="QuadMesh" id="QuadMesh_y7lh1"]
 size = Vector2(10, 10)
 
-[sub_resource type="CylinderShape3D" id="CylinderShape3D_hl2q6"]
-
-[sub_resource type="CylinderMesh" id="CylinderMesh_5qnka"]
-
 [node name="BaseRoom" type="Node3D"]
 script = ExtResource("1_jfj10")
 
@@ -53,52 +47,6 @@ transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 2.3
 material_override = SubResource("ShaderMaterial_aqj8g")
 mesh = SubResource("QuadMesh_y7lh1")
 
-[node name="WallEast" type="StaticBody3D" parent="."]
-transform = Transform3D(-4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0, 1, 5, 4, 0)
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="WallEast"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.5, 0)
-shape = SubResource("BoxShape3D_ebfcv")
-
-[node name="MeshInstance3D" type="MeshInstance3D" parent="WallEast"]
-transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0)
-material_override = ExtResource("3_7eyfm")
-mesh = SubResource("QuadMesh_y7lh1")
-
-[node name="WallWest" type="StaticBody3D" parent="."]
-transform = Transform3D(-4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0, 1, -5, 4, 0)
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="WallWest"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.5, 0)
-shape = SubResource("BoxShape3D_ebfcv")
-
-[node name="MeshInstance3D" type="MeshInstance3D" parent="WallWest"]
-transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0)
-material_override = ExtResource("3_7eyfm")
-mesh = SubResource("QuadMesh_y7lh1")
-
-[node name="WallNorth" type="StaticBody3D" parent="."]
-transform = Transform3D(1.91069e-15, -4.37114e-08, -1, -1, -4.37114e-08, 0, -4.37114e-08, 1, -4.37114e-08, 0, 4, -5)
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="WallNorth"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.5, 0)
-shape = SubResource("BoxShape3D_ebfcv")
-
-[node name="MeshInstance3D" type="MeshInstance3D" parent="WallNorth"]
-transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0)
-material_override = ExtResource("3_7eyfm")
-mesh = SubResource("QuadMesh_y7lh1")
-
-[node name="Climbable" parent="." instance=ExtResource("4_gthei")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.41109, 1.14292, 1.72827)
-
-[node name="CollisionShape3D" parent="Climbable" index="0"]
-shape = SubResource("CylinderShape3D_hl2q6")
-
-[node name="MeshInstance3D" type="MeshInstance3D" parent="Climbable"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.0970397, 0)
-mesh = SubResource("CylinderMesh_5qnka")
-
 [node name="DoorCameras" type="Node3D" parent="."]
 
 [node name="DoorCamera" parent="DoorCameras" instance=ExtResource("5_qdiph")]
@@ -106,5 +54,3 @@ transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 4.7276
 
 [node name="ExitDoor" parent="." instance=ExtResource("7_v2o7d")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.21207, -1.66706)
-
-[editable path="Climbable"]

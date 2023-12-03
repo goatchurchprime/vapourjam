@@ -1,5 +1,5 @@
 shader_type spatial;
-render_mode world_vertex_coords,blend_mix,depth_draw_opaque,cull_back,diffuse_burley,specular_schlick_ggx;
+render_mode world_vertex_coords,blend_mix,depth_draw_opaque,cull_back,diffuse_burley,specular_schlick_ggx,unshaded;
 
 uniform vec4 albedo : source_color;
 uniform float point_size : hint_range(0,128) = 15.0;

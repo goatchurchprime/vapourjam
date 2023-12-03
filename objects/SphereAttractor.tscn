@@ -1,6 +1,7 @@
-[gd_scene load_steps=5 format=3 uid="uid://bptwjfkavah45"]
+[gd_scene load_steps=6 format=3 uid="uid://bptwjfkavah45"]
 
 [ext_resource type="PackedScene" uid="uid://c8l60rnugru40" path="res://addons/godot-xr-tools/objects/pickable.tscn" id="1_n8kan"]
+[ext_resource type="PackedScene" uid="uid://13xr51myuasc" path="res://objects/icosphere_tool.glb" id="2_jko21"]
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_22e5o"]
 
@@ -23,5 +24,9 @@ attenuation = 0.0669859
 radius = 0.5
 
 [node name="SphereMesh" type="MeshInstance3D" parent="." index="2"]
+visible = false
 mesh = SubResource("SphereMesh_0wvwh")
 surface_material_override/0 = SubResource("StandardMaterial3D_y05lm")
+
+[node name="icosphere_tool" parent="." index="3" instance=ExtResource("2_jko21")]
+transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 1.20763, 0, -0.0655674)
