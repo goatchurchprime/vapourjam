@@ -1,0 +1,21 @@
+[gd_scene load_steps=5 format=3 uid="uid://b5vak7rojxfm3"]
+
+[ext_resource type="PackedScene" uid="uid://cw8ba26q0dasa" path="res://rooms/BaseRoom.tscn" id="1_68uy6"]
+[ext_resource type="PackedScene" uid="uid://dstwgq7sc08wb" path="res://objects/FramedPicture.tscn" id="2_mahkl"]
+[ext_resource type="Texture2D" uid="uid://23jw6glyyp7w" path="res://pictures/cattensegrity.jpg" id="3_stgvc"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_e4fgn"]
+resource_local_to_scene = true
+shading_mode = 0
+albedo_texture = ExtResource("3_stgvc")
+
+[node name="Level2" instance=ExtResource("1_68uy6")]
+
+[node name="FramedPicture" parent="." index="7" instance=ExtResource("2_mahkl")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.77321, -3.95449)
+
+[node name="Canvas" parent="FramedPicture" index="1"]
+surface_material_override/0 = SubResource("StandardMaterial3D_e4fgn")
+
+[editable path="Climbable"]
+[editable path="FramedPicture"]

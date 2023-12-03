@@ -1,7 +1,6 @@
 extends Node3D
 
-
-func _ready():
+func moveplayertospawnpoint():
 	var xrorigin = XRHelpers.get_xr_origin(get_parent())
 	var xrcamera = XRHelpers.get_xr_camera(get_parent())
 	var camera_transform = xrcamera.transform
@@ -13,3 +12,20 @@ func _ready():
 	transform.origin.y = 0
 	xrorigin.global_transform = ($SpawnPoint.global_transform * transform.inverse()).orthonormalized()
 	print("spawn ", xrcamera.global_transform, $SpawnPoint.global_transform)
+
+var doorcamerasremaining = [ ]
+func _ready():
+	moveplayertospawnpoint()
+	for doorcamera in $DoorCameras.get_children():
+		doorcamera.get_node("Quarters").doorcamera_unlocked.connect(on_doorcamera_unlocked)
+		doorcamerasremaining.append(doorcamera)
+	$ExitDoor/XRToolsInteractableAreaButton.button_pressed.connect(get_parent().currentsceneexited)
+
+func activateexitdoor():
+	$ExitDoor/XRToolsInteractableAreaButton.monitoring = true
+	$ExitDoor/XRToolsInteractableAreaButton/FrameMesh.visible = true
+
+func on_doorcamera_unlocked(doorcamera):
+	doorcamerasremaining.erase(doorcamera)
+	if len(doorcamerasremaining) == 0:
+		activateexitdoor()

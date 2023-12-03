@@ -3,6 +3,8 @@ extends Node3D
 
 @export var colourindensitythreshold = 0.5
 
+signal doorcamera_unlocked(doorcameranode)
+
 func _ready():
 	get_node("../ViewPanel").get_surface_override_material(0).albedo_texture = get_node("../SubViewport").get_viewport().get_texture()
 
@@ -20,8 +22,8 @@ func scoreviewport():
 			var y = int(vpsz.y*(0.25 + 0.5*qh))
 			var c = image.get_pixel(x, y)
 			var colourintensity = c.get_luminance()
-			if qw == 0 and qh == 0:
-				print(c, c.get_luminance())
+			if qw == 0 and qh == 0 and colourintensity != 0:
+				print("lumin00 ", c, colourintensity)
 			var qn = get_node("Q%d%d" % [qw, qh])
 			if colourintensity > colourindensitythreshold:
 				if qn.visible:
@@ -45,10 +47,10 @@ func scoreviewport():
 	if not $QExit.visible and ldooropen:
 		$QExit.visible = true
 		$OpenSound.play()
+		emit_signal("doorcamera_unlocked", get_parent())
 	elif shrinkhappened and maxshrinksz != -1.0:
 		$RingSound.pitch_scale = (maxshrinksz + 1.0)*0.3
 		$RingSound.play()
-		
 		
 			
 			
@@ -59,11 +61,6 @@ func _process(delta):
 		if not $QExit.visible:
 			scoreviewport()
 		t0 = 0
-
-func _input(event):
-	if event is InputEventKey:
-		if event.pressed and event.keycode == KEY_P:
-			get_node("../../GPUVapourSource2").position.x += 0.1
 
 
 func _on_door_camera_action_pressed(pickable):

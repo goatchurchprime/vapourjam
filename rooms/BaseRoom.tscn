@@ -1,4 +1,4 @@
-[gd_scene load_steps=14 format=3 uid="uid://cw8ba26q0dasa"]
+[gd_scene load_steps=15 format=3 uid="uid://cw8ba26q0dasa"]
 
 [ext_resource type="Shader" uid="uid://b5xmy0gsmqbam" path="res://rooms/holodeck_map_shader.tres" id="1_atmi4"]
 [ext_resource type="Script" path="res://rooms/BaseRoom.gd" id="1_jfj10"]
@@ -6,6 +6,7 @@
 [ext_resource type="Material" uid="uid://c5no820h1vdbl" path="res://rooms/holodeck_grid.material" id="3_7eyfm"]
 [ext_resource type="PackedScene" uid="uid://cjyilbm4ucc7s" path="res://addons/godot-xr-tools/objects/climbable.tscn" id="4_gthei"]
 [ext_resource type="PackedScene" uid="uid://bb2dqe3rnux7n" path="res://objects/DoorCamera.tscn" id="5_qdiph"]
+[ext_resource type="PackedScene" uid="uid://bvs7hsebp2xsv" path="res://objects/ExitDoor.tscn" id="7_v2o7d"]
 
 [sub_resource type="PlaneMesh" id="PlaneMesh_n5a7a"]
 size = Vector2(0.3, 0.3)
@@ -98,7 +99,12 @@ shape = SubResource("CylinderShape3D_hl2q6")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.0970397, 0)
 mesh = SubResource("CylinderMesh_5qnka")
 
-[node name="DoorCamera" parent="." instance=ExtResource("5_qdiph")]
+[node name="DoorCameras" type="Node3D" parent="."]
+
+[node name="DoorCamera" parent="DoorCameras" instance=ExtResource("5_qdiph")]
 transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 4.72763, 1.59458, -2.06651e-07)
+
+[node name="ExitDoor" parent="." instance=ExtResource("7_v2o7d")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.21207, -1.66706)
 
 [editable path="Climbable"]

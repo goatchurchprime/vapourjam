@@ -9,7 +9,6 @@ shading_mode = 0
 albedo_texture = ExtResource("1_jka0a")
 
 [node name="FramedPicture" type="Node3D"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.50848, 2.17285, -3.55136)
 
 [node name="CSGBox3D" type="CSGBox3D" parent="."]
 size = Vector3(1.1, 1.1, 0.05)

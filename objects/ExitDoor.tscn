@@ -1,0 +1,52 @@
+[gd_scene load_steps=9 format=3 uid="uid://bvs7hsebp2xsv"]
+
+[ext_resource type="Script" path="res://addons/godot-xr-tools/interactables/interactable_area_button.gd" id="1_mjk5n"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_f5ijq"]
+size = Vector3(1, 2, 0.2)
+
+[sub_resource type="BoxMesh" id="BoxMesh_gjxae"]
+size = Vector3(1, 2, 0.2)
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_5wyfh"]
+frequency = 0.1
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_gr8hl"]
+noise = SubResource("FastNoiseLite_5wyfh")
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ib1x6"]
+albedo_color = Color(0.176471, 0.176471, 0.176471, 1)
+metallic = 0.9
+roughness = 0.0
+normal_enabled = true
+normal_texture = SubResource("NoiseTexture2D_gr8hl")
+
+[sub_resource type="BoxMesh" id="BoxMesh_sayiw"]
+size = Vector3(1.1, 2.1, 0.1)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_5ceqo"]
+shading_mode = 0
+albedo_color = Color(0.889752, 0.857501, 0.2265, 1)
+
+[node name="ExitDoor" type="Node3D"]
+
+[node name="XRToolsInteractableAreaButton" type="Area3D" parent="."]
+collision_layer = 0
+collision_mask = 524288
+monitoring = false
+script = ExtResource("1_mjk5n")
+button = NodePath("ButtonMesh")
+displacement = Vector3(0, 0, 0.1)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="XRToolsInteractableAreaButton"]
+shape = SubResource("BoxShape3D_f5ijq")
+
+[node name="ButtonMesh" type="MeshInstance3D" parent="XRToolsInteractableAreaButton"]
+mesh = SubResource("BoxMesh_gjxae")
+surface_material_override/0 = SubResource("StandardMaterial3D_ib1x6")
+
+[node name="FrameMesh" type="MeshInstance3D" parent="XRToolsInteractableAreaButton"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.04)
+visible = false
+mesh = SubResource("BoxMesh_sayiw")
+surface_material_override/0 = SubResource("StandardMaterial3D_5ceqo")
