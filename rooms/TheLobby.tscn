@@ -2,7 +2,7 @@
 
 [ext_resource type="PackedScene" uid="uid://cw8ba26q0dasa" path="res://rooms/BaseRoom.tscn" id="1_tnx3d"]
 [ext_resource type="PackedScene" uid="uid://dstwgq7sc08wb" path="res://objects/FramedPicture.tscn" id="2_bhxjb"]
-[ext_resource type="Texture2D" uid="uid://bucobwm8xh2rb" path="res://pictures/hoodiepig.jpg" id="3_655uy"]
+[ext_resource type="Texture2D" uid="uid://xhxtkgu0oqjx" path="res://pictures/smokeonthewirral.png" id="3_fyjkr"]
 [ext_resource type="Texture2D" uid="uid://cu45sn4j74rtg" path="res://pictures/controllerbuttons.png" id="4_u5lth"]
 [ext_resource type="Script" path="res://rooms/roompolyshape.gd" id="5_lmyvd"]
 [ext_resource type="PackedScene" uid="uid://dafw3cumcf23j" path="res://rooms/octogonroom.gltf" id="6_1wg1y"]
@@ -10,7 +10,7 @@
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_l8134"]
 resource_local_to_scene = true
 shading_mode = 0
-albedo_texture = ExtResource("3_655uy")
+albedo_texture = ExtResource("3_fyjkr")
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_45d7h"]
 resource_local_to_scene = true
@@ -32,7 +32,7 @@ visible = false
 visible = false
 
 [node name="FramedPicture" parent="." index="5" instance=ExtResource("2_bhxjb")]
-transform = Transform3D(0.497625, 0, 0.867392, 0, 1, 0, -0.867392, 0, 0.497625, -1.08237, 1.33028, -1.23167)
+transform = Transform3D(0.497625, 0, 0.867392, 0, 0.7, 0, -0.867392, 0, 0.497625, -1.08237, 1.33028, -1.23167)
 
 [node name="Canvas" parent="FramedPicture" index="1"]
 surface_material_override/0 = SubResource("StandardMaterial3D_l8134")

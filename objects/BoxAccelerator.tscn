@@ -1,7 +1,9 @@
-[gd_scene load_steps=8 format=3 uid="uid://oafuaon5kmv4"]
+[gd_scene load_steps=12 format=3 uid="uid://oafuaon5kmv4"]
 
 [ext_resource type="PackedScene" uid="uid://c8l60rnugru40" path="res://addons/godot-xr-tools/objects/pickable.tscn" id="1_pxwr5"]
 [ext_resource type="PackedScene" uid="uid://b0u70sagoy2ji" path="res://objects/cylinder_tool.glb" id="2_0f6xf"]
+[ext_resource type="PackedScene" uid="uid://dlgqg6ubgveuj" path="res://objects/fan2.gltf" id="3_ga2ur"]
+[ext_resource type="Script" path="res://objects/squarefan.gd" id="4_s2gd3"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_wwnvs"]
 size = Vector3(0.5, 0.5, 1)
@@ -20,6 +22,16 @@ height = 0.4
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_mh63c"]
 albedo_color = Color(0, 0.596078, 1, 1)
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_q824b"]
+top_radius = 0.016
+bottom_radius = 0.03
+height = 0.25
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_7gkdb"]
+albedo_color = Color(0.286275, 1, 1, 1)
+metallic = 1.0
+roughness = 0.12
 
 [node name="BoxAccelerator" instance=ExtResource("1_pxwr5")]
 collision_layer = 65536
@@ -47,3 +59,45 @@ surface_material_override/0 = SubResource("StandardMaterial3D_mh63c")
 
 [node name="cylinder_tool" parent="." index="4" instance=ExtResource("2_0f6xf")]
 transform = Transform3D(0.3, 0, 0, 0, -2.18557e-08, 0.3, 0, -0.5, -1.31134e-08, 0, 0, 0)
+visible = false
+
+[node name="fan2" parent="." index="5" instance=ExtResource("3_ga2ur")]
+
+[node name="Cube_016" parent="fan2" index="2"]
+visible = false
+
+[node name="squarefan" type="Node3D" parent="." index="6"]
+transform = Transform3D(0.707107, -0.707107, 0, 0.707107, 0.707107, 0, 0, 0, 1, 0, 0, 0.265786)
+script = ExtResource("4_s2gd3")
+
+[node name="BladeX" type="Node3D" parent="squarefan" index="0"]
+transform = Transform3D(1, 0, 0, 0, 1.42, 0, 0, 0, 1, 0, 0, 0)
+
+[node name="Blade" type="MeshInstance3D" parent="squarefan/BladeX" index="0"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 0.2, 0, 0.125, 0)
+mesh = SubResource("CylinderMesh_q824b")
+skeleton = NodePath("../..")
+surface_material_override/0 = SubResource("StandardMaterial3D_7gkdb")
+
+[node name="Blade2" type="MeshInstance3D" parent="squarefan/BladeX" index="1"]
+transform = Transform3D(-1, 1.49012e-07, 0, -1.49012e-07, -1, 0, 0, 0, 0.2, 0, -0.125, 0)
+mesh = SubResource("CylinderMesh_q824b")
+skeleton = NodePath("../..")
+surface_material_override/0 = SubResource("StandardMaterial3D_7gkdb")
+
+[node name="BladeY" type="Node3D" parent="squarefan" index="1"]
+transform = Transform3D(-4.37114e-08, -1.42, 0, 1, -6.20702e-08, 0, 0, 0, 1, 0, 0, 0)
+
+[node name="Blade" type="MeshInstance3D" parent="squarefan/BladeY" index="0"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 0.2, 0, 0.125, 0)
+mesh = SubResource("CylinderMesh_q824b")
+skeleton = NodePath("../..")
+surface_material_override/0 = SubResource("StandardMaterial3D_7gkdb")
+
+[node name="Blade2" type="MeshInstance3D" parent="squarefan/BladeY" index="1"]
+transform = Transform3D(-1, 1.49012e-07, 0, -1.49012e-07, -1, 0, 0, 0, 0.2, 0, -0.125, 0)
+mesh = SubResource("CylinderMesh_q824b")
+skeleton = NodePath("../..")
+surface_material_override/0 = SubResource("StandardMaterial3D_7gkdb")
+
+[editable path="fan2"]
