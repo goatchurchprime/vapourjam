@@ -1,9 +1,27 @@
 extends Node3D
 
-@onready var current_scene = $Level1
 
+var sceneorder = [ "TheLobby", "EasyIntro" ]
+var currentsceneindex = 0
+var current_scene = null
+
+func preparecurrentscene():
+	if currentsceneindex == 0:
+		await get_tree().create_timer(0.1).timeout
+		current_scene.activateexitdoor()
+
+func _ready():
+	current_scene = get_node(sceneorder[currentsceneindex])
+	assert (current_scene != null)
+	preparecurrentscene()
+	
 func currentsceneexited(button):
-	load_scene("res://rooms/EasyIntro.tscn")
+	await fadeoutcurrentscene()
+	if currentsceneindex >= len(sceneorder):
+		currentsceneindex = 0
+	loadnewcurrentscene("res://rooms/%s.tscn" % sceneorder[currentsceneindex])
+	preparecurrentscene()
+	
 
 func set_fade(p_value : float):
 	if p_value == 0.0:
@@ -13,18 +31,18 @@ func set_fade(p_value : float):
 		$Fade.visible = true
 
 var _tween : Tween
-func load_scene(p_scene_path : String):
-	if current_scene:
-		if _tween:
-			_tween.kill()
-		_tween = get_tree().create_tween()
-		_tween.tween_method(set_fade, 0.0, 1.0, 0.15)
-		await _tween.finished
-		remove_child(current_scene)
-		current_scene.queue_free()
-		current_scene = null
+func fadeoutcurrentscene():
+	if _tween:
+		_tween.kill()
+	_tween = get_tree().create_tween()
+	_tween.tween_method(set_fade, 0.0, 1.0, 0.15)
+	await _tween.finished
+	remove_child(current_scene)
+	current_scene.queue_free()
+	current_scene = null
 
-	# Load the new scene
+func loadnewcurrentscene(p_scene_path : String):
+	print("Loading scene ", p_scene_path)
 	var new_scene : PackedScene
 	if ResourceLoader.has_cached(p_scene_path):
 		new_scene = ResourceLoader.load(p_scene_path)
@@ -46,7 +64,6 @@ func load_scene(p_scene_path : String):
 
 	current_scene = new_scene.instantiate()
 	add_child(current_scene)
-
 	await get_tree().create_timer(0.1).timeout
 	if _tween:
 		_tween.kill()

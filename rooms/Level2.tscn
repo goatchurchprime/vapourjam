@@ -11,11 +11,10 @@ albedo_texture = ExtResource("3_stgvc")
 
 [node name="Level2" instance=ExtResource("1_68uy6")]
 
-[node name="FramedPicture" parent="." index="7" instance=ExtResource("2_mahkl")]
+[node name="FramedPicture" parent="." index="5" instance=ExtResource("2_mahkl")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.77321, -3.95449)
 
 [node name="Canvas" parent="FramedPicture" index="1"]
 surface_material_override/0 = SubResource("StandardMaterial3D_e4fgn")
 
-[editable path="Climbable"]
 [editable path="FramedPicture"]

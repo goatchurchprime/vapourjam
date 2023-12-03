@@ -12,6 +12,8 @@ func scoreviewport():
 	get_node("../SubViewport").render_target_update_mode = SubViewport.UPDATE_ONCE
 	await RenderingServer.frame_post_draw
 	var image: Image = get_node("../SubViewport").get_viewport().get_texture().get_image()
+	if image == null:
+		return
 	var ldooropen = true
 	var shrinkhappened = false
 	var maxshrinksz = -1.0

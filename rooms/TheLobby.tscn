@@ -15,7 +15,7 @@ resource_local_to_scene = true
 shading_mode = 0
 albedo_texture = ExtResource("4_u5lth")
 
-[node name="BaseRoom" instance=ExtResource("1_tnx3d")]
+[node name="TheLobby" instance=ExtResource("1_tnx3d")]
 
 [node name="DoorCameras" parent="." index="2"]
 visible = false
@@ -24,13 +24,16 @@ visible = false
 visible = false
 
 [node name="FramedPicture" parent="." index="5" instance=ExtResource("2_bhxjb")]
-transform = Transform3D(0.497625, 0, 0.867392, 0, 1, 0, -0.867392, 0, 0.497625, -1.83474, 1.33028, 0.0797513)
+transform = Transform3D(0.497625, 0, 0.867392, 0, 1, 0, -0.867392, 0, 0.497625, -1.08237, 1.33028, -1.23167)
 
 [node name="Canvas" parent="FramedPicture" index="1"]
 surface_material_override/0 = SubResource("StandardMaterial3D_l8134")
 
 [node name="FramedPicture2" parent="." index="6" instance=ExtResource("2_bhxjb")]
-transform = Transform3D(0.779994, 0, -0.625787, 0, 0.6, 0, 0.625787, 0, 0.779994, 1.94078, 1.01013, -0.443557)
+transform = Transform3D(0.779994, 0, -0.625787, 0, 0.6, 0, 0.625787, 0, 0.779994, 1.30452, 1.63077, -0.954023)
+
+[node name="CSGBox3D" parent="FramedPicture2" index="0"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.310931, 0, 0)
 
 [node name="Canvas" parent="FramedPicture2" index="1"]
 surface_material_override/0 = SubResource("StandardMaterial3D_45d7h")

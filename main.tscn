@@ -13,7 +13,7 @@
 [ext_resource type="PackedScene" uid="uid://bxm1ply47vaan" path="res://addons/godot-xr-tools/functions/movement_climb.tscn" id="9_6f5lv"]
 [ext_resource type="Script" path="res://addons/godot-xr-tools/overrides/ground_physics_settings.gd" id="9_qng54"]
 [ext_resource type="PackedScene" uid="uid://ctltchlf2j2r4" path="res://addons/xr-simulator/XRSimulator.tscn" id="10_kug0p"]
-[ext_resource type="PackedScene" uid="uid://co2tisev5dyb" path="res://rooms/Level1.tscn" id="13_4v33y"]
+[ext_resource type="PackedScene" uid="uid://c8igqygjx4esl" path="res://rooms/TheLobby.tscn" id="14_5nq5v"]
 
 [sub_resource type="QuadMesh" id="QuadMesh_tuha2"]
 custom_aabb = AABB(-5000, -5000, -5000, 10000, 10000, 10000)
@@ -103,4 +103,4 @@ physics = SubResource("Resource_cbi6m")
 [node name="XRSimulator" parent="XROrigin3D" instance=ExtResource("10_kug0p")]
 xr_origin = NodePath("..")
 
-[node name="Level1" parent="." instance=ExtResource("13_4v33y")]
+[node name="TheLobby" parent="." instance=ExtResource("14_5nq5v")]

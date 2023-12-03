@@ -12,7 +12,7 @@ func moveplayertospawnpoint():
 		transform.origin = camera_transform.origin
 		transform.origin.y = 0
 		xrorigin.global_transform = ($SpawnPoint.global_transform * transform.inverse()).orthonormalized()
-		print("spawn ", xrcamera.global_transform, $SpawnPoint.global_transform)
+		#print("spawn ", xrcamera.global_transform, $SpawnPoint.global_transform)
 
 var doorcamerasremaining = [ ]
 func _ready():
