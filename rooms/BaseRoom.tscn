@@ -33,6 +33,7 @@ script = ExtResource("1_jfj10")
 [node name="SpawnPoint" type="Node3D" parent="."]
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="SpawnPoint"]
+visible = false
 mesh = SubResource("PlaneMesh_n5a7a")
 surface_material_override/0 = SubResource("StandardMaterial3D_ancea")
 

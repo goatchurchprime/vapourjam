@@ -1,0 +1,14 @@
+[gd_scene load_steps=2 format=3 uid="uid://cl6an8ne65ot3"]
+
+[ext_resource type="Script" path="res://guis/guiparticle.gd" id="1_p51ek"]
+
+[node name="GuiNodeParams" type="Control"]
+layout_mode = 3
+anchors_preset = 0
+script = ExtResource("1_p51ek")
+
+[node name="GridContainer" type="GridContainer" parent="."]
+layout_mode = 0
+offset_right = 700.0
+offset_bottom = 23.0
+columns = 2
