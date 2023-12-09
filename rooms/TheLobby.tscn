@@ -1,11 +1,51 @@
-[gd_scene load_steps=12 format=3 uid="uid://c8igqygjx4esl"]
+[gd_scene load_steps=23 format=3 uid="uid://c8igqygjx4esl"]
 
 [ext_resource type="PackedScene" uid="uid://cw8ba26q0dasa" path="res://rooms/BaseRoom.tscn" id="1_tnx3d"]
 [ext_resource type="PackedScene" uid="uid://dstwgq7sc08wb" path="res://objects/FramedPicture.tscn" id="2_bhxjb"]
+[ext_resource type="Shader" path="res://materials/vapour.gdshader" id="2_pywmg"]
 [ext_resource type="Texture2D" uid="uid://xhxtkgu0oqjx" path="res://pictures/smokeonthewirral.png" id="3_fyjkr"]
 [ext_resource type="Texture2D" uid="uid://cu45sn4j74rtg" path="res://pictures/controllerbuttons.png" id="4_u5lth"]
 [ext_resource type="Script" path="res://rooms/roompolyshape.gd" id="5_lmyvd"]
 [ext_resource type="PackedScene" uid="uid://dafw3cumcf23j" path="res://rooms/octogonroom.gltf" id="6_1wg1y"]
+[ext_resource type="PackedScene" uid="uid://clujaf3u776a3" path="res://addons/godot-xr-tools/objects/viewport_2d_in_3d.tscn" id="8_wjlad"]
+[ext_resource type="PackedScene" uid="uid://cl6an8ne65ot3" path="res://guis/guiparticle.tscn" id="9_2pw05"]
+[ext_resource type="PackedScene" uid="uid://dgdb1texynduw" path="res://addons/godot-xr-tools/objects/virtual_keyboard.tscn" id="10_qeuqx"]
+
+[sub_resource type="Curve" id="Curve_aq8le"]
+_data = [Vector2(0.00191572, 0.984988), 0.0, 0.0, 0, 0, Vector2(0.630268, 0.884911), -0.565935, -0.565935, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="CurveTexture" id="CurveTexture_q48xl"]
+curve = SubResource("Curve_aq8le")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_vjf7f"]
+resource_local_to_scene = true
+emission_shape = 6
+emission_ring_axis = Vector3(0, 1, 0)
+emission_ring_height = 0.0
+emission_ring_radius = 0.2
+emission_ring_inner_radius = 0.1
+direction = Vector3(0, 1, 0)
+spread = 0.0
+initial_velocity_min = 0.7
+initial_velocity_max = 0.8
+gravity = Vector3(0, 0, 0)
+alpha_curve = SubResource("CurveTexture_q48xl")
+collision_mode = 1
+collision_friction = 0.2
+collision_bounce = 0.5
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_dtmmx"]
+render_priority = 0
+shader = ExtResource("2_pywmg")
+shader_parameter/albedo = Color(0.211765, 0.960784, 0.0980392, 0.603922)
+shader_parameter/point_size = 20.0
+shader_parameter/farcol = Vector3(0.1, 0.1, 0.1)
+shader_parameter/colormixweight = 0.5
+
+[sub_resource type="PointMesh" id="PointMesh_yjfob"]
+resource_local_to_scene = true
+material = SubResource("ShaderMaterial_dtmmx")
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_l8134"]
 resource_local_to_scene = true
@@ -29,16 +69,33 @@ transparency = 1
 cull_mode = 1
 albedo_color = Color(0, 0, 0, 0.972549)
 
+[sub_resource type="TorusMesh" id="TorusMesh_qe8d3"]
+inner_radius = 0.2
+outer_radius = 0.5
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_7gubn"]
+albedo_color = Color(0.196078, 1, 1, 1)
+metallic = 1.0
+roughness = 0.0
+
 [node name="TheLobby" instance=ExtResource("1_tnx3d")]
 
 [node name="SpawnPoint" parent="." index="0"]
-transform = Transform3D(0.999999, 0, -0.00167549, 0, 1, 0, 0.00167549, 0, 0.999999, 0, 0, 0)
+transform = Transform3D(-0.954189, 0, 0.299208, 0, 1, 0, -0.299208, 0, -0.954189, -0.146462, 0, -0.0112187)
+
+[node name="MeshInstance3D" parent="SpawnPoint" index="0"]
+transform = Transform3D(1, 0, 2.98023e-08, 0, 1, 0, -2.98023e-08, 0, 1, 0, 0.0199361, 0)
+visible = true
 
 [node name="DoorCameras" parent="." index="2"]
 visible = false
 
 [node name="VapourSource" parent="." index="4"]
-visible = false
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.21686, 0.435695, 1.84113)
+
+[node name="GPUParticles3D" parent="VapourSource" index="1"]
+process_material = SubResource("ParticleProcessMaterial_vjf7f")
+draw_pass_1 = SubResource("PointMesh_yjfob")
 
 [node name="FramedPicture" parent="." index="5" instance=ExtResource("2_bhxjb")]
 transform = Transform3D(0.497625, 0, 0.867392, 0, 0.7, 0, -0.867392, 0, 0.497625, -1.08237, 1.33028, -1.23167)
@@ -67,10 +124,35 @@ visible = false
 visible = false
 
 [node name="DarkenSphere" type="MeshInstance3D" parent="." index="8"]
+visible = false
 mesh = SubResource("SphereMesh_f1uqa")
 surface_material_override/0 = SubResource("StandardMaterial3D_b0vws")
 
+[node name="MeshInstance3D" type="MeshInstance3D" parent="." index="9"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.3611, 0.64135, -0.946126)
+mesh = SubResource("TorusMesh_qe8d3")
+surface_material_override/0 = SubResource("StandardMaterial3D_7gubn")
+
+[node name="vapoursourceGUI" parent="." index="10" instance=ExtResource("8_wjlad")]
+transform = Transform3D(-0.995479, 0, -0.0949773, 0, 1, 0, 0.0949773, 0, -0.995479, 0.176609, 1.55364, 2.21634)
+screen_size = Vector2(1.5, 2.5)
+scene = ExtResource("9_2pw05")
+viewport_size = Vector2(400, 500)
+transparent = 0
+
+[node name="VirtualKeyboard" parent="." index="11" instance=ExtResource("10_qeuqx")]
+transform = Transform3D(-0.949129, 0, 0.314887, 0, 1, 0, -0.314887, 0, -0.949129, -1.32174, 0.747527, 1.80508)
+
+[node name="vapoursourceGUImaterial" parent="." index="12" instance=ExtResource("8_wjlad")]
+transform = Transform3D(-0.847687, 0, 0.530496, 0, 1, 0, -0.530496, 0, -0.847687, -2.93595, 1.55364, 1.72967)
+screen_size = Vector2(1.5, 2.5)
+scene = ExtResource("9_2pw05")
+viewport_size = Vector2(400, 500)
+transparent = 0
+
 [editable path="ExitDoor"]
+[editable path="VapourSource"]
+[editable path="VapourSource/flask_4"]
 [editable path="FramedPicture"]
 [editable path="FramedPicture2"]
 [editable path="StaticBody3D/octogonroom"]

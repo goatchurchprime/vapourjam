@@ -1,4 +1,4 @@
-[gd_scene load_steps=26 format=3 uid="uid://cbydosia47duf"]
+[gd_scene load_steps=27 format=3 uid="uid://cbydosia47duf"]
 
 [ext_resource type="PackedScene" uid="uid://bq86r4yll8po" path="res://addons/godot-xr-tools/hands/scenes/lowpoly/left_fullglove_low.tscn" id="1_ckbsl"]
 [ext_resource type="Script" path="res://main.gd" id="1_cthjx"]
@@ -6,7 +6,7 @@
 [ext_resource type="PackedScene" uid="uid://xqimcf20s2jp" path="res://addons/godot-xr-tools/hands/scenes/lowpoly/right_fullglove_low.tscn" id="2_21ao1"]
 [ext_resource type="Shader" path="res://addons/godot-xr-tools/staging/fade.gdshader" id="2_icgkg"]
 [ext_resource type="PackedScene" uid="uid://bl2nuu3qhlb5k" path="res://addons/godot-xr-tools/functions/movement_direct.tscn" id="3_mbhq1"]
-[ext_resource type="Texture2D" uid="uid://1824fjuirf3d" path="res://pictures/treesskybox.png" id="3_rw55r"]
+[ext_resource type="Texture2D" uid="uid://dyuy7oe3gla71" path="res://pictures/treesskybox.jpg" id="3_rjalf"]
 [ext_resource type="PackedScene" uid="uid://diyu06cw06syv" path="res://addons/godot-xr-tools/player/player_body.tscn" id="4_fr5tq"]
 [ext_resource type="PackedScene" uid="uid://b4ysuy43poobf" path="res://addons/godot-xr-tools/functions/function_pickup.tscn" id="5_vq85m"]
 [ext_resource type="PackedScene" uid="uid://b6bk2pj8vbj28" path="res://addons/godot-xr-tools/functions/movement_turn.tscn" id="5_yuk0q"]
@@ -18,6 +18,7 @@
 [ext_resource type="Script" path="res://addons/godot-xr-tools/overrides/ground_physics_settings.gd" id="9_qng54"]
 [ext_resource type="PackedScene" uid="uid://ctltchlf2j2r4" path="res://addons/xr-simulator/XRSimulator.tscn" id="10_kug0p"]
 [ext_resource type="PackedScene" uid="uid://c8igqygjx4esl" path="res://rooms/TheLobby.tscn" id="14_5nq5v"]
+[ext_resource type="PackedScene" uid="uid://cqhw276realc" path="res://addons/godot-xr-tools/functions/function_pointer.tscn" id="17_rof06"]
 
 [sub_resource type="QuadMesh" id="QuadMesh_tuha2"]
 custom_aabb = AABB(-5000, -5000, -5000, 10000, 10000, 10000)
@@ -29,7 +30,7 @@ shader = ExtResource("2_icgkg")
 shader_parameter/alpha = 0.0
 
 [sub_resource type="PanoramaSkyMaterial" id="PanoramaSkyMaterial_1wuwa"]
-panorama = ExtResource("3_rw55r")
+panorama = ExtResource("3_rjalf")
 
 [sub_resource type="Sky" id="Sky_s1a1u"]
 sky_material = SubResource("PanoramaSkyMaterial_1wuwa")
@@ -37,6 +38,9 @@ sky_material = SubResource("PanoramaSkyMaterial_1wuwa")
 [sub_resource type="Environment" id="Environment_mt1qa"]
 background_mode = 2
 sky = SubResource("Sky_s1a1u")
+volumetric_fog_density = 1.0
+volumetric_fog_length = 1.0
+volumetric_fog_detail_spread = 0.63728
 
 [sub_resource type="Resource" id="Resource_bxati"]
 script = ExtResource("8_o5boh")
@@ -69,6 +73,7 @@ environment = SubResource("Environment_mt1qa")
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="WorldEnvironment"]
 transform = Transform3D(1, 0, 0, 0, 0.153193, 0.988196, 0, -0.988196, 0.153193, 0, 16.1129, 0)
+visible = false
 
 [node name="StartXR" parent="." instance=ExtResource("1_pedee")]
 
@@ -114,6 +119,8 @@ jump_button_action = "ax_button"
 physics = SubResource("Resource_cbi6m")
 
 [node name="MovementClimb" parent="XROrigin3D" instance=ExtResource("9_6f5lv")]
+
+[node name="FunctionPointer" parent="XROrigin3D" instance=ExtResource("17_rof06")]
 
 [node name="XRSimulator" parent="XROrigin3D" instance=ExtResource("10_kug0p")]
 xr_origin = NodePath("..")

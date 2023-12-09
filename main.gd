@@ -1,7 +1,8 @@
 extends Node3D
 
 
-var sceneorder = [ "TheLobby", "BlockingWall", "InvisibleParticles", "EasyIntro", "FocusSphere" ]
+#var sceneorder = [ "TheLobby", "BlockingWall", "InvisibleParticles", "EasyIntro", "FocusSphere" ]
+var sceneorder = [ "TheLobby", "EasyIntro", "FocusSphere", "InvisibleParticles", "BlockingWall" ]
 var currentsceneindex = 0
 var current_scene = null
 
@@ -14,6 +15,7 @@ func _ready():
 	current_scene = get_node(sceneorder[currentsceneindex])
 	assert (current_scene != null)
 	preparecurrentscene()
+
 	
 func currentsceneexited(button):
 	await fadeoutcurrentscene()
