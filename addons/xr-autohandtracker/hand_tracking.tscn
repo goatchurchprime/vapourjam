@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://5t4yujrgnavh"]
+
+[ext_resource type="Script" path="res://addons/xr-autohandtracker/hand_tracking.gd" id="1_pfnaa"]
+
+[node name="HandTracking" type="Node3D"]
+script = ExtResource("1_pfnaa")
