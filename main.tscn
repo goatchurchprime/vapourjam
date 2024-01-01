@@ -1,6 +1,5 @@
-[gd_scene load_steps=27 format=3 uid="uid://cbydosia47duf"]
+[gd_scene load_steps=28 format=3 uid="uid://cbydosia47duf"]
 
-[ext_resource type="PackedScene" uid="uid://bq86r4yll8po" path="res://addons/godot-xr-tools/hands/scenes/lowpoly/left_fullglove_low.tscn" id="1_ckbsl"]
 [ext_resource type="Script" path="res://main.gd" id="1_cthjx"]
 [ext_resource type="PackedScene" uid="uid://clc5dre31iskm" path="res://addons/godot-xr-tools/xr/start_xr.tscn" id="1_pedee"]
 [ext_resource type="PackedScene" uid="uid://xqimcf20s2jp" path="res://addons/godot-xr-tools/hands/scenes/lowpoly/right_fullglove_low.tscn" id="2_21ao1"]
@@ -10,6 +9,7 @@
 [ext_resource type="PackedScene" uid="uid://diyu06cw06syv" path="res://addons/godot-xr-tools/player/player_body.tscn" id="4_fr5tq"]
 [ext_resource type="PackedScene" uid="uid://b4ysuy43poobf" path="res://addons/godot-xr-tools/functions/function_pickup.tscn" id="5_vq85m"]
 [ext_resource type="PackedScene" uid="uid://b6bk2pj8vbj28" path="res://addons/godot-xr-tools/functions/movement_turn.tscn" id="5_yuk0q"]
+[ext_resource type="PackedScene" uid="uid://5t4yujrgnavh" path="res://addons/xr-autohandtracker/hand_tracking.tscn" id="6_kqne2"]
 [ext_resource type="PackedScene" uid="uid://0xlsitpu17r1" path="res://addons/godot-xr-tools/functions/movement_footstep.tscn" id="7_ob6rw"]
 [ext_resource type="PackedScene" uid="uid://c2q5phg8w08o" path="res://addons/godot-xr-tools/functions/movement_jump.tscn" id="8_3e0hb"]
 [ext_resource type="Script" path="res://addons/godot-xr-tools/audio/surface_audio_type.gd" id="8_o5boh"]
@@ -17,6 +17,7 @@
 [ext_resource type="AudioStream" uid="uid://c7wh7vrk0rgtl" path="res://default_footstep.wav" id="9_ci6sm"]
 [ext_resource type="Script" path="res://addons/godot-xr-tools/overrides/ground_physics_settings.gd" id="9_qng54"]
 [ext_resource type="PackedScene" uid="uid://ctltchlf2j2r4" path="res://addons/xr-simulator/XRSimulator.tscn" id="10_kug0p"]
+[ext_resource type="PackedScene" uid="uid://ddsj74hpt1kgb" path="res://addons/godot-xr-tools/hands/scenes/highpoly/left_physics_tac_glove.tscn" id="10_vuml7"]
 [ext_resource type="PackedScene" uid="uid://c8igqygjx4esl" path="res://rooms/TheLobby.tscn" id="14_5nq5v"]
 [ext_resource type="PackedScene" uid="uid://cqhw276realc" path="res://addons/godot-xr-tools/functions/function_pointer.tscn" id="17_rof06"]
 
@@ -89,8 +90,6 @@ radius = 0.15
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.5, 1, -0.5)
 tracker = &"left_hand"
 
-[node name="LeftHand" parent="XROrigin3D/LeftHand" instance=ExtResource("1_ckbsl")]
-
 [node name="MovementDirect" parent="XROrigin3D/LeftHand" instance=ExtResource("3_mbhq1")]
 max_speed = 2.2
 strafe = true
@@ -99,6 +98,11 @@ strafe = true
 
 [node name="MovementFootstep" parent="XROrigin3D/LeftHand" instance=ExtResource("7_ob6rw")]
 default_surface_audio_type = SubResource("Resource_bxati")
+
+[node name="LeftPhysicsHand" parent="XROrigin3D/LeftHand" instance=ExtResource("10_vuml7")]
+
+[node name="HandTracking" parent="XROrigin3D/LeftHand" instance=ExtResource("6_kqne2")]
+applymiddlefingerfix = false
 
 [node name="RightHand" type="XRController3D" parent="XROrigin3D"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.5, 1, -0.5)
@@ -114,6 +118,8 @@ step_turn_angle = 30.0
 
 [node name="MovementJump" parent="XROrigin3D/RightHand" instance=ExtResource("8_3e0hb")]
 jump_button_action = "ax_button"
+
+[node name="HandTracking" parent="XROrigin3D/RightHand" instance=ExtResource("6_kqne2")]
 
 [node name="PlayerBody" parent="XROrigin3D" instance=ExtResource("4_fr5tq")]
 physics = SubResource("Resource_cbi6m")
