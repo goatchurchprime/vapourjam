@@ -1,4 +1,4 @@
-[gd_scene load_steps=28 format=3 uid="uid://cbydosia47duf"]
+[gd_scene load_steps=34 format=3 uid="uid://cbydosia47duf"]
 
 [ext_resource type="Script" path="res://main.gd" id="1_cthjx"]
 [ext_resource type="PackedScene" uid="uid://clc5dre31iskm" path="res://addons/godot-xr-tools/xr/start_xr.tscn" id="1_pedee"]
@@ -49,6 +49,37 @@ name = ""
 walk_sounds = Array[AudioStream]([ExtResource("9_ci6sm")])
 walk_pitch_minimum = 0.8
 walk_pitch_maximum = 1.2
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_7e346"]
+animation = &"Grip"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_64b8i"]
+animation = &"Grip"
+
+[sub_resource type="AnimationNodeBlend2" id="AnimationNodeBlend2_fq7nk"]
+filter_enabled = true
+filters = ["Armature/Skeleton3D:Little_Distal_L", "Armature/Skeleton3D:Little_Intermediate_L", "Armature/Skeleton3D:Little_Metacarpal_L", "Armature/Skeleton3D:Little_Proximal_L", "Armature/Skeleton3D:Middle_Distal_L", "Armature/Skeleton3D:Middle_Intermediate_L", "Armature/Skeleton3D:Middle_Metacarpal_L", "Armature/Skeleton3D:Middle_Proximal_L", "Armature/Skeleton3D:Ring_Distal_L", "Armature/Skeleton3D:Ring_Intermediate_L", "Armature/Skeleton3D:Ring_Metacarpal_L", "Armature/Skeleton3D:Ring_Proximal_L", "Armature/Skeleton3D:Thumb_Distal_L", "Armature/Skeleton3D:Thumb_Metacarpal_L", "Armature/Skeleton3D:Thumb_Proximal_L", "Armature/Skeleton:Little_Distal_L", "Armature/Skeleton:Little_Intermediate_L", "Armature/Skeleton:Little_Proximal_L", "Armature/Skeleton:Middle_Distal_L", "Armature/Skeleton:Middle_Intermediate_L", "Armature/Skeleton:Middle_Proximal_L", "Armature/Skeleton:Ring_Distal_L", "Armature/Skeleton:Ring_Intermediate_L", "Armature/Skeleton:Ring_Proximal_L", "Armature/Skeleton:Thumb_Distal_L", "Armature/Skeleton:Thumb_Proximal_L"]
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_c6hqs"]
+animation = &"Grip 5"
+
+[sub_resource type="AnimationNodeBlend2" id="AnimationNodeBlend2_35v81"]
+filter_enabled = true
+filters = ["Armature/Skeleton3D:Index_Distal_L", "Armature/Skeleton3D:Index_Intermediate_L", "Armature/Skeleton3D:Index_Metacarpal_L", "Armature/Skeleton3D:Index_Proximal_L", "Armature/Skeleton:Index_Distal_L", "Armature/Skeleton:Index_Intermediate_L", "Armature/Skeleton:Index_Proximal_L"]
+
+[sub_resource type="AnimationNodeBlendTree" id="AnimationNodeBlendTree_ucddf"]
+graph_offset = Vector2(-536, 11)
+nodes/ClosedHand1/node = SubResource("AnimationNodeAnimation_7e346")
+nodes/ClosedHand1/position = Vector2(-600, 300)
+nodes/ClosedHand2/node = SubResource("AnimationNodeAnimation_64b8i")
+nodes/ClosedHand2/position = Vector2(-360, 300)
+nodes/Grip/node = SubResource("AnimationNodeBlend2_fq7nk")
+nodes/Grip/position = Vector2(0, 20)
+nodes/OpenHand/node = SubResource("AnimationNodeAnimation_c6hqs")
+nodes/OpenHand/position = Vector2(-600, 100)
+nodes/Trigger/node = SubResource("AnimationNodeBlend2_35v81")
+nodes/Trigger/position = Vector2(-360, 20)
+node_connections = [&"Grip", 0, &"Trigger", &"Grip", 1, &"ClosedHand2", &"Trigger", 0, &"OpenHand", &"Trigger", 1, &"ClosedHand1", &"output", 0, &"Grip"]
 
 [sub_resource type="Resource" id="Resource_cbi6m"]
 script = ExtResource("9_qng54")
@@ -101,6 +132,9 @@ default_surface_audio_type = SubResource("Resource_bxati")
 
 [node name="LeftPhysicsHand" parent="XROrigin3D/LeftHand" instance=ExtResource("10_vuml7")]
 
+[node name="AnimationTree" parent="XROrigin3D/LeftHand/LeftPhysicsHand" index="1"]
+tree_root = SubResource("AnimationNodeBlendTree_ucddf")
+
 [node name="HandTracking" parent="XROrigin3D/LeftHand" instance=ExtResource("6_kqne2")]
 applymiddlefingerfix = false
 
@@ -132,3 +166,6 @@ physics = SubResource("Resource_cbi6m")
 xr_origin = NodePath("..")
 
 [node name="TheLobby" parent="." instance=ExtResource("14_5nq5v")]
+
+[editable path="XROrigin3D/LeftHand/LeftPhysicsHand"]
+[editable path="XROrigin3D/LeftHand/LeftPhysicsHand/Hand_Glove_L"]

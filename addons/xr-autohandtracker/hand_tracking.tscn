@@ -4,3 +4,7 @@
 
 [node name="HandTracking" type="Node3D"]
 script = ExtResource("1_pfnaa")
+applyscaling = false
+coiincidewristorknuckle = false
+
+[node name="VisibleHandTrackSkeleton" type="Node3D" parent="."]
