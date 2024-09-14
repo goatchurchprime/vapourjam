@@ -15,6 +15,7 @@ const vec3 bordercolor = vec3(0.1, 0.1, 0.2);
 void vertex() {
 	float distcamera = length(CAMERA_POSITION_WORLD - VERTEX); 
 	POINT_SIZE = point_size/distcamera;
+	POINT_SIZE = 40.0;
 
 	float mixval = (1.0/(distcamera + fardisttaper) - 1.0/fardisttaper)*fardisttaperfac;
 	//vec3 distancecolor = mix(closecol, farcol, mixval);
@@ -32,11 +33,13 @@ void fragment() {
 	SPECULAR = 0.0;
 	ALPHA *= albedo.a * COLOR.a;
 
-	float rsq = (POINT_COORD.x-0.5)*(POINT_COORD.x-0.5) + (POINT_COORD.y-0.5)*(POINT_COORD.y-0.5);
-	if (rsq > 0.25+point_size*0.002) 
-		discard;
+
+	float rsq = (POINT_COORD.x-0.2)*(POINT_COORD.x-0.5) + (POINT_COORD.y-0.5)*(POINT_COORD.y-0.5);
+//	if (rsq > 0.25+point_size*0.002) 
+//		discard;
 
 	//ALPHA = 0.6*mix(1.0, 0.0, rsq*4.0);
 	//ALBEDO *= mix(vec3(1.0, 1.0, 1.0), bordercolor, rsq*3.0);
-	ALPHA *= mix(1.0, 0.0, abs(cos((1.0+rsq*8.0))));
+	ALPHA *= mix(1.0, 0.0, abs(cos((1.0+rsq*8.0)))) + 0.1;
+
 }
