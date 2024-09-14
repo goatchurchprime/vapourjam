@@ -15,6 +15,24 @@ func _ready():
 	current_scene = get_node(sceneorder[currentsceneindex])
 	assert (current_scene != null)
 	preparecurrentscene()
+	$XROrigin3D/LeftHand/FunctionPickup.has_picked_up.connect(objectgrab.bind("left"))
+	$XROrigin3D/LeftHand/FunctionPickup.has_dropped.connect(objectdrop.bind("left"))
+	
+
+# Object grabbing management
+var heldobjects = { "left":null, "right":null }
+func objectgrab(what, hand):
+	print("objectgrab ", what, hand, what._grab_driver)
+	heldobjects[hand] = what
+func objectdrop(hand):
+	print("objectdrop ", heldobjects[hand], get_path_to(heldobjects[hand]))
+	rpc("objectdropplace", get_path_to(heldobjects[hand]), heldobjects[hand].transform)
+	heldobjects[hand] = null
+
+@rpc("any_peer", "call_remote", "reliable", 0)
+func objectdropplace(nodepath, t):
+	get_node(nodepath).transform = t
+
 
 	
 func currentsceneexited(button):
@@ -81,5 +99,4 @@ func _input(event):
 		if event.pressed and event.keycode == KEY_O:
 			current_scene.activateexitdoor()
 			#load_scene("res://rooms/Level2.tscn")
-			
 			
