@@ -18,10 +18,12 @@ func _ready():
 
 	
 func currentsceneexited(button):
+	rpc("allplayeradvancecurrentscene", (currentsceneindex + 1) % len(sceneorder))
+
+@rpc("any_peer", "call_local", "reliable", 0)
+func allplayeradvancecurrentscene(lcurrentsceneindex):
+	currentsceneindex = lcurrentsceneindex
 	await fadeoutcurrentscene()
-	currentsceneindex += 1
-	if currentsceneindex >= len(sceneorder):
-		currentsceneindex = 0
 	loadnewcurrentscene("res://rooms/%s.tscn" % sceneorder[currentsceneindex])
 	preparecurrentscene()
 	
