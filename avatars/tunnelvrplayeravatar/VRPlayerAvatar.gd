@@ -26,6 +26,9 @@ func PF_initlocalplayer():
 	randomize()
 	labeltext = possibleusernames[randi()%len(possibleusernames)]
 
+func playername():
+	return labeltext
+
 func PF_connectedtoserver():
 	if not multiplayer.is_server():
 		clientawaitingspawnpoint = true

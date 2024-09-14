@@ -1,0 +1,62 @@
+[gd_scene load_steps=10 format=3 uid="uid://br1frnxgn4qbr"]
+
+[ext_resource type="Script" path="res://objects/goonline.gd" id="1_1nxp1"]
+[ext_resource type="Script" path="res://addons/godot-xr-tools/interactables/interactable_area_button.gd" id="1_grdav"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_f5ijq"]
+size = Vector3(1, 1, 0.2)
+
+[sub_resource type="BoxMesh" id="BoxMesh_xwhcw"]
+size = Vector3(1, 1, 0.4)
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_5wyfh"]
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_gr8hl"]
+as_normal_map = true
+noise = SubResource("FastNoiseLite_5wyfh")
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_d5pty"]
+cull_mode = 2
+albedo_color = Color(0.455158, 0.610322, 0.994893, 1)
+metallic = 0.9
+roughness = 0.0
+normal_enabled = true
+normal_texture = SubResource("NoiseTexture2D_gr8hl")
+
+[sub_resource type="BoxMesh" id="BoxMesh_u4nc4"]
+size = Vector3(1.1, 1.1, 0.1)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_5ceqo"]
+shading_mode = 0
+albedo_color = Color(0.889752, 0.857501, 0.2265, 1)
+
+[node name="GoOnline" type="Node3D"]
+script = ExtResource("1_1nxp1")
+
+[node name="XRToolsInteractableAreaButton" type="Area3D" parent="."]
+collision_layer = 0
+collision_mask = 524288
+script = ExtResource("1_grdav")
+button = NodePath("ButtonMesh")
+displacement = Vector3(0, 0, -0.5)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="XRToolsInteractableAreaButton"]
+shape = SubResource("BoxShape3D_f5ijq")
+
+[node name="ButtonMesh" type="MeshInstance3D" parent="XRToolsInteractableAreaButton"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.0627029)
+mesh = SubResource("BoxMesh_xwhcw")
+surface_material_override/0 = SubResource("StandardMaterial3D_d5pty")
+
+[node name="Label3D" type="Label3D" parent="XRToolsInteractableAreaButton/ButtonMesh"]
+transform = Transform3D(0.762962, -0.646444, 0, 0.646444, 0.762962, 0, 0, 0, 1, 0, 0, 0.211415)
+text = "Go Online"
+font_size = 44
+
+[node name="FrameMesh" type="MeshInstance3D" parent="XRToolsInteractableAreaButton"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.04)
+visible = false
+mesh = SubResource("BoxMesh_u4nc4")
+surface_material_override/0 = SubResource("StandardMaterial3D_5ceqo")
+
+[connection signal="button_pressed" from="XRToolsInteractableAreaButton" to="." method="_on_xr_tools_interactable_area_button_button_pressed"]
