@@ -57,8 +57,13 @@ material = SubResource("4")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.0802994, -0.057813)
 remote_path = NodePath("../../AudioStreamPlayer")
 
+[node name="GPUParticlesCollisionSphere3D" type="GPUParticlesCollisionSphere3D" parent="HeadCam"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.0318024, 0.0653791)
+radius = 0.15
+
 [node name="ControllerLeft" type="Node3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.307861, -0.332077, -0.346588)
+visible = false
 
 [node name="left_quest2_controller" parent="ControllerLeft" instance=ExtResource("7")]
 transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, 0, 0.15)
@@ -68,6 +73,7 @@ show_rest_only = true
 
 [node name="ControllerRight" type="Node3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.319285, -0.390021, -0.39732)
+visible = false
 
 [node name="right_quest2_contoller" parent="ControllerRight" instance=ExtResource("6")]
 transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, 0, 0.15)
