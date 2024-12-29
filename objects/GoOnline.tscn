@@ -1,7 +1,7 @@
 [gd_scene load_steps=10 format=3 uid="uid://br1frnxgn4qbr"]
 
-[ext_resource type="Script" path="res://objects/goonline.gd" id="1_1nxp1"]
-[ext_resource type="Script" path="res://addons/godot-xr-tools/interactables/interactable_area_button.gd" id="1_grdav"]
+[ext_resource type="Script" uid="uid://ddj0ocs7mwf15" path="res://objects/goonline.gd" id="1_1nxp1"]
+[ext_resource type="Script" uid="uid://kv6j6idblab7" path="res://addons/godot-xr-tools/interactables/interactable_area_button.gd" id="1_grdav"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_f5ijq"]
 size = Vector3(1, 1, 0.2)
@@ -42,6 +42,7 @@ displacement = Vector3(0, 0, -0.5)
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="XRToolsInteractableAreaButton"]
 shape = SubResource("BoxShape3D_f5ijq")
+debug_color = Color(0, 0.6, 0.7, 0.42)
 
 [node name="ButtonMesh" type="MeshInstance3D" parent="XRToolsInteractableAreaButton"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.0627029)

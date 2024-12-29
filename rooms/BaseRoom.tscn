@@ -1,7 +1,7 @@
 [gd_scene load_steps=12 format=3 uid="uid://cw8ba26q0dasa"]
 
 [ext_resource type="Shader" uid="uid://b5xmy0gsmqbam" path="res://rooms/holodeck_map_shader.tres" id="1_atmi4"]
-[ext_resource type="Script" path="res://rooms/BaseRoom.gd" id="1_jfj10"]
+[ext_resource type="Script" uid="uid://oo8nnye5e3f" path="res://rooms/BaseRoom.gd" id="1_jfj10"]
 [ext_resource type="Texture2D" uid="uid://dd6n51g6uam2k" path="res://rooms/grid_glow.png" id="2_harrv"]
 [ext_resource type="PackedScene" uid="uid://bb2dqe3rnux7n" path="res://objects/DoorCamera.tscn" id="5_qdiph"]
 [ext_resource type="PackedScene" uid="uid://bhr0hku266fqw" path="res://objects/VapourSource.tscn" id="6_xq6fx"]
@@ -42,6 +42,7 @@ surface_material_override/0 = SubResource("StandardMaterial3D_ancea")
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Floor"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.5, 0)
 shape = SubResource("BoxShape3D_ebfcv")
+debug_color = Color(0, 0.6, 0.7, 0.42)
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="Floor"]
 transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 2.38419e-07, 0)

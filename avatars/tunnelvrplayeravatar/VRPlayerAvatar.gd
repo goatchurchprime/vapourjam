@@ -64,10 +64,10 @@ func skelbonescopy(skela, skelb):
 func PF_processlocalavatarposition(delta):
 	transform = shrinkavatartransform*arvrorigin.transform
 	$HeadCam.transform = arvrorigin.get_node("XRCamera3D").transform
-	$hand_l.transform = arvrorigin.global_transform.inverse()*arvrorigin.get_node("LeftHandController/LeftHand/Hand_Glove_low_L").global_transform
-	skelbonescopy($hand_l/Armature/Skeleton3D, arvrorigin.get_node("LeftHandController/LeftHand/Hand_Glove_low_L/Armature/Skeleton3D"))
-	$hand_r.transform = arvrorigin.global_transform.inverse()*arvrorigin.get_node("RightHandController/RightHand/Hand_low_R").global_transform
-	skelbonescopy($hand_r/Armature/Skeleton3D, arvrorigin.get_node("RightHandController/RightHand/Hand_low_R/Armature/Skeleton3D"))
+	$hand_l.transform = arvrorigin.global_transform.inverse()*arvrorigin.get_node("LeftHand/LeftPhysicsHand/Hand_Glove_L").global_transform
+	skelbonescopy($hand_l/Armature/Skeleton3D, arvrorigin.get_node("LeftHand/LeftPhysicsHand/Hand_Glove_L/Armature/Skeleton3D"))
+	$hand_r.transform = arvrorigin.global_transform.inverse()*arvrorigin.get_node("RightHand/RightHand/Hand_low_R").global_transform
+	skelbonescopy($hand_r/Armature/Skeleton3D, arvrorigin.get_node("RightHand/RightHand/Hand_low_R/Armature/Skeleton3D"))
 	if projectedhands:
 		var headface = Vector3($HeadCam.transform.basis.z.x, 0, $HeadCam.transform.basis.z.z).normalized()
 		var headup = Vector3(headface.x, 0.8, headface.z)*0.25

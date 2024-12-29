@@ -1,13 +1,13 @@
 [gd_scene load_steps=19 format=3 uid="uid://cx0gfuqimwxrl"]
 
 [ext_resource type="PackedScene" uid="uid://cw8ba26q0dasa" path="res://rooms/BaseRoom.tscn" id="1_a5bae"]
-[ext_resource type="Script" path="res://rooms/roompolyshape.gd" id="2_bke8c"]
+[ext_resource type="Script" uid="uid://bruvb2mp001f1" path="res://rooms/roompolyshape.gd" id="2_bke8c"]
 [ext_resource type="PackedScene" uid="uid://dafw3cumcf23j" path="res://rooms/octogonroom.gltf" id="3_v5vgo"]
 [ext_resource type="PackedScene" uid="uid://dstwgq7sc08wb" path="res://objects/FramedPicture.tscn" id="4_063la"]
 [ext_resource type="Texture2D" uid="uid://ces1ildol0g8" path="res://pictures/hoodiecat.jpg" id="5_br3d7"]
 [ext_resource type="Texture2D" uid="uid://co8xo51e08pov" path="res://pictures/hoodietiger.jpg" id="6_l8qem"]
 [ext_resource type="PackedScene" uid="uid://oafuaon5kmv4" path="res://objects/BoxAccelerator.tscn" id="6_stnx0"]
-[ext_resource type="Shader" path="res://materials/vapour.gdshader" id="7_fmmj5"]
+[ext_resource type="Shader" uid="uid://c6vq6x5ugld6s" path="res://materials/vapour.gdshader" id="7_fmmj5"]
 [ext_resource type="PackedScene" uid="uid://bptwjfkavah45" path="res://objects/SphereAttractor.tscn" id="8_qdsr2"]
 [ext_resource type="PackedScene" uid="uid://bdmiors20i42g" path="res://objects/emitter_beaker.glb" id="10_8blls"]
 
@@ -38,6 +38,7 @@ emission_ring_axis = Vector3(0, 1, 0)
 emission_ring_height = 0.0
 emission_ring_radius = 0.2
 emission_ring_inner_radius = 0.1
+emission_ring_cone_angle = 90.0
 direction = Vector3(0, 1, 0)
 spread = 20.0
 initial_velocity_min = 0.7
@@ -76,6 +77,7 @@ script = ExtResource("2_bke8c")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="StaticBody3D" index="0"]
 shape = SubResource("ConcavePolygonShape3D_auyxk")
+debug_color = Color(0, 0.6, 0.7, 0.42)
 
 [node name="octogonroom" parent="StaticBody3D" index="1" instance=ExtResource("3_v5vgo")]
 
@@ -105,8 +107,14 @@ transform = Transform3D(0.685844, 0, 0.727749, 0, 1, 0, -0.727749, 0, 0.685844, 
 [node name="SphereAttractor" parent="." index="9" instance=ExtResource("8_qdsr2")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.809489, -3.81117)
 
+[node name="CollisionShape3D" parent="SphereAttractor" index="0"]
+debug_color = Color(0, 0.6, 0.7, 0.42)
+
 [node name="SphereAttractor2" parent="." index="10" instance=ExtResource("8_qdsr2")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.809489, -2.22953)
+
+[node name="CollisionShape3D" parent="SphereAttractor2" index="0"]
+debug_color = Color(0, 0.6, 0.7, 0.42)
 
 [node name="GPUParticlesAttractorSphere3D" parent="SphereAttractor2" index="1"]
 strength = 0.4
