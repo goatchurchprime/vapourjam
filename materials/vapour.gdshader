@@ -9,11 +9,11 @@ uniform vec3 farcol = vec3(0.1,0.1,0.1);
 const float fardist = 6.0;
 const float fardisttaper = 2.0;
 const float fardisttaperfac = -(fardisttaper*((fardisttaper + fardist)))/fardist;
-uniform float colormixweight = 0.05; 
+uniform float colormixweight = 0.05;
 const vec3 bordercolor = vec3(0.1, 0.1, 0.2);
 
 void vertex() {
-	float distcamera = length(CAMERA_POSITION_WORLD - VERTEX); 
+	float distcamera = length(CAMERA_POSITION_WORLD - VERTEX);
 	POINT_SIZE = point_size/distcamera;
 
 	float mixval = (1.0/(distcamera + fardisttaper) - 1.0/fardisttaper)*fardisttaperfac;
@@ -33,7 +33,7 @@ void fragment() {
 	ALPHA *= albedo.a * COLOR.a;
 
 	float rsq = (POINT_COORD.x-0.5)*(POINT_COORD.x-0.5) + (POINT_COORD.y-0.5)*(POINT_COORD.y-0.5);
-	if (rsq > 0.25+point_size*0.002) 
+	if (rsq > 0.25+point_size*0.002)
 		discard;
 
 	//ALPHA = 0.6*mix(1.0, 0.0, rsq*4.0);

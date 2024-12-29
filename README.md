@@ -8,13 +8,13 @@ This has now been experimentally upgraded to to WebRTC multiplayer with added VO
 
 ## Addons required
 
+* [mqtt-client](https://godotengine.org/asset-library/asset/1993) v1.2 is already included because it is very small and pure GDScript
+* **player-networking** from [repo](https://github.com/goatchurchprime/godot_multiplayer_networking_workbench) (included)
 * **Godot OpenXR Vendors plugin for Godot 4.3** Version: 3.0.0, installs into addons/godotopenxrvendors
-* **WebRTC plugin - Godot 4.1+** Version: 1.0.6, !!install into addons/webrtc
-* **TwoVoip** Version: v3.0 install into addons/twovoip
+* [TwoVoip](https://godotengine.org/asset-library/asset/3169) v3.6 is required to compress your audio stream from the microphone using the Opus library.  It can be used on its own for testing from [two-voip-godot-4](https://github.com/goatchurchprime/two-voip-godot-4)  The asset is 100Mb, so is not included with the project.  **A version of the Godot Engine compiled with [Pull Request#100508](https://github.com/godotengine/godot/pull/100508) is recommended for a more reliable implementation of the microphone input.**
+* [WebRTC plugin - Godot 4.1+](https://godotengine.org/asset-library/asset/2103) is required to implement the WebRTC protocol and is also about 100Mb in size (because it has the implementation for all platforms).  Make sure you set its download directory to `addons/webrtc`. 
 * **godotopenxr** (or [openxrvendors](https://github.com/GodotVR/godot_openxr_vendors))
-* **NetworkingWorkbench** from [repo](https://github.com/goatchurchprime/godot_multiplayer_networking_workbench) (included)
 * **Godot XR Tools** Version: 4.3.3, installs into addons/godot-xr-tools (included)
-* **MQTT CLient** Version: 1.2 installs into addons/mqtt (included)
 * **XR Input Simulator** Version: 1.2.0 installs into addons/xr-simulator
 
 ## Issues

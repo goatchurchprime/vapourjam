@@ -2,7 +2,7 @@
 
 [ext_resource type="PackedScene" uid="uid://c8l60rnugru40" path="res://addons/godot-xr-tools/objects/pickable.tscn" id="1_2vbmh"]
 [ext_resource type="AudioStream" uid="uid://fvqg1kya87he" path="res://sounds/burning-fire-sound-effect.mp3" id="2_g1h2a"]
-[ext_resource type="Shader" path="res://materials/vapour.gdshader" id="2_k62mt"]
+[ext_resource type="Shader" uid="uid://c6vq6x5ugld6s" path="res://materials/vapour.gdshader" id="2_k62mt"]
 [ext_resource type="PackedScene" uid="uid://dm72ctkqa2nsy" path="res://objects/flask_4.glb" id="3_6rbvj"]
 
 [sub_resource type="CylinderShape3D" id="CylinderShape3D_2jnyr"]
@@ -23,6 +23,7 @@ emission_ring_axis = Vector3(0, 1, 0)
 emission_ring_height = 0.0
 emission_ring_radius = 0.2
 emission_ring_inner_radius = 0.1
+emission_ring_cone_angle = 90.0
 direction = Vector3(0, 1, 0)
 spread = 0.0
 initial_velocity_min = 0.7
@@ -61,6 +62,7 @@ freeze = true
 
 [node name="CollisionShape3D" parent="." index="0"]
 shape = SubResource("CylinderShape3D_2jnyr")
+debug_color = Color(0, 0.6, 0.7, 0.42)
 
 [node name="GPUParticles3D" type="GPUParticles3D" parent="." index="1"]
 transform = Transform3D(1, -2.98023e-08, 0, 2.98023e-08, 1, 0, 0, 0, 1, 0, 0, 0)

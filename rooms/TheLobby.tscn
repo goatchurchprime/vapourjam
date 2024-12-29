@@ -2,10 +2,10 @@
 
 [ext_resource type="PackedScene" uid="uid://cw8ba26q0dasa" path="res://rooms/BaseRoom.tscn" id="1_tnx3d"]
 [ext_resource type="PackedScene" uid="uid://dstwgq7sc08wb" path="res://objects/FramedPicture.tscn" id="2_bhxjb"]
-[ext_resource type="Shader" path="res://materials/vapour.gdshader" id="2_pywmg"]
+[ext_resource type="Shader" uid="uid://c6vq6x5ugld6s" path="res://materials/vapour.gdshader" id="2_pywmg"]
 [ext_resource type="Texture2D" uid="uid://xhxtkgu0oqjx" path="res://pictures/smokeonthewirral.png" id="3_fyjkr"]
 [ext_resource type="Texture2D" uid="uid://cu45sn4j74rtg" path="res://pictures/controllerbuttons.png" id="4_u5lth"]
-[ext_resource type="Script" path="res://rooms/roompolyshape.gd" id="5_lmyvd"]
+[ext_resource type="Script" uid="uid://bruvb2mp001f1" path="res://rooms/roompolyshape.gd" id="5_lmyvd"]
 [ext_resource type="PackedScene" uid="uid://dafw3cumcf23j" path="res://rooms/octogonroom.gltf" id="6_1wg1y"]
 [ext_resource type="PackedScene" uid="uid://clujaf3u776a3" path="res://addons/godot-xr-tools/objects/viewport_2d_in_3d.tscn" id="8_wjlad"]
 [ext_resource type="PackedScene" uid="uid://cl6an8ne65ot3" path="res://guis/guiparticle.tscn" id="9_2pw05"]
@@ -56,6 +56,7 @@ emission_ring_axis = Vector3(0, 1, 0)
 emission_ring_height = 0.0
 emission_ring_radius = 0.2
 emission_ring_inner_radius = 0.15
+emission_ring_cone_angle = 90.0
 direction = Vector3(0, 1, 0)
 spread = 0.0
 initial_velocity_min = 0.7
@@ -123,6 +124,7 @@ visible = false
 
 [node name="CollisionShape3D" parent="ExitDoor/XRToolsInteractableAreaButton" index="0"]
 shape = SubResource("BoxShape3D_f5ijq")
+debug_color = Color(0, 0.6, 0.7, 0.42)
 
 [node name="ButtonMesh" parent="ExitDoor/XRToolsInteractableAreaButton" index="1"]
 mesh = SubResource("BoxMesh_gjxae")
@@ -134,6 +136,7 @@ surface_material_override/0 = SubResource("StandardMaterial3D_5ceqo")
 
 [node name="CollisionShape3D" parent="ExitDoor/StaticBody3D" index="0"]
 shape = SubResource("BoxShape3D_ha0e5")
+debug_color = Color(0, 0.6, 0.7, 0.42)
 
 [node name="VapourSource" parent="." index="4"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.21686, 0.435695, 1.84113)
@@ -159,6 +162,7 @@ script = ExtResource("5_lmyvd")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="StaticBody3D" index="0"]
 shape = SubResource("ConcavePolygonShape3D_5dm12")
+debug_color = Color(0, 0.6, 0.7, 0.42)
 
 [node name="octogonroom" parent="StaticBody3D" index="1" instance=ExtResource("6_1wg1y")]
 
@@ -184,9 +188,12 @@ screen_size = Vector2(1.5, 2.5)
 scene = ExtResource("9_2pw05")
 viewport_size = Vector2(400, 500)
 transparent = 0
+scene_properties_keys = PackedStringArray("guiparticle.gd", "isgpuemitter")
+isgpuemitter = true
 
 [node name="VirtualKeyboard" parent="." index="11" instance=ExtResource("10_qeuqx")]
 transform = Transform3D(-0.949129, 0, 0.314887, 0, 1, 0, -0.314887, 0, -0.949129, -1.32174, 0.747527, 1.80508)
+scene_properties_keys = PackedStringArray("virtual_keyboard_2d.gd")
 
 [node name="vapoursourceGUImaterial" parent="." index="12" instance=ExtResource("8_wjlad")]
 transform = Transform3D(-0.847687, 0, 0.530496, 0, 1, 0, -0.530496, 0, -0.847687, -2.93595, 1.55364, 1.72967)
@@ -194,6 +201,8 @@ screen_size = Vector2(1.5, 2.5)
 scene = ExtResource("9_2pw05")
 viewport_size = Vector2(400, 500)
 transparent = 0
+scene_properties_keys = PackedStringArray("guiparticle.gd", "isgpuemitter")
+isgpuemitter = true
 
 [node name="GoOnline" parent="." index="13" instance=ExtResource("11_8lkbi")]
 transform = Transform3D(-0.0626511, 0, 0.998035, 0, 1, 0, -0.998035, 0, -0.0626511, -2.81315, 0.853992, 0)
