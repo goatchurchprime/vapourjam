@@ -17,7 +17,6 @@ var xclientopenservers = [ ]
 var xclienttreeitems = { }
 var xclientclosedlist = [ ]
 
-signal xclientstatusesupdate
 signal messagereceived(msg, fromclientid)
 
 @onready var Roomplayertree = $VBox/HBoxM/HSplitContainer/Roomplayers/Tree
@@ -28,12 +27,26 @@ var Roomplayertreecaboosereached = false
 @onready var StatusMQTT = $VBox/HBoxM/HSplitContainer/Msettings/HBox4/StatusMQTT
 @onready var StatusWebRTC = $VBox/HBoxM/HSplitContainer/Msettings/HBox5/StatusWebRTC
 
-@onready var treenodeicon1 = ImageTexture.create_from_image(Image.load_from_file("res://addons/player-networking/AudioStreamPlayer3D.svg"))
+@onready var treenodeiconserver = load("res://addons/player-networking/icons/MultiplayerSpawner.svg")
+
+# Use https://webrtc.github.io/samples/src/content/peerconnection/trickle-ice/
+# to tell whether a given iceserver is working.  
+# There needs to be a non .local iceCandidate in the list
+
+var iceservers = [ { "urls": ["stun:stun.l.google.com:19302"] } ]
+var DDiceservers = [ {
+	"urls": [ 'turn:turn.anyfirewall.com:443?transport=tcp' ],
+	"credential": 'webrtc',
+	"username": 'webrtc'
+} ]
+#var iceservers = { "urls":['turn:turn.defenestrate.it:3478'] } 
+
 
 func clearallstatuses():
 	Roomplayertree.clear()
 	Roomplayertree.create_item()
 	xclienttreeitems.clear()
+	xclientopenservers.clear()
 	xclientstatuses.clear()
 	xclientclosedlist.clear()
 	Roomplayertreecaboosereached = false
@@ -43,6 +56,7 @@ func clearallstatuses():
 func _ready():
 	clearallstatuses()
 	StatusMQTT.select(0)
+	$VBox/HBox/Label/WarningLabel.visible = not DirAccess.open("res://").dir_exists("res://addons/webrtc")
 
 var Dns = -1
 func _on_NetworkOptionsMQTTWebRTC_item_selected(ns):
@@ -108,7 +122,7 @@ func processothermclientstatus(mclientid, v):
 		xclientclosedlist.append(mclientid)
 		if xclientstatuses.has(mclientid):
 			xclientstatuses[mclientid] = mstatus
-			emit_signal("xclientstatusesupdate")
+			NetworkGateway.emit_signal("xclientstatusesupdate")
 		return
 
 	xclientstatuses[mclientid] = mstatus
@@ -130,7 +144,7 @@ func processothermclientstatus(mclientid, v):
 			xclientopenservers.append(mclientid)
 		clearclosedtopics()
 		establishtreeitemparent(mclientid, Roomplayertree.get_root())
-		xclienttreeitems[mclientid].set_icon(2, treenodeicon1)
+		xclienttreeitems[mclientid].set_icon(2, treenodeiconserver)
 	else:
 		xclienttreeitems[mclientid].set_icon(2, null)
 		
@@ -138,7 +152,7 @@ func processothermclientstatus(mclientid, v):
 	if v.has("playername"):
 		xclienttreeitems[mclientid].set_text(1, v["playername"])
 		
-	emit_signal("xclientstatusesupdate")
+	NetworkGateway.emit_signal("xclientstatusesupdate")
 
 
 func _on_mqtt_broker_disconnected():
@@ -165,12 +179,18 @@ func start_mqtt():
 	Roomnametext.editable = false
 	clearallstatuses()
 	randomize()
+	print($MQTT, get_children(), $MQTT.get_script())
+	print($MQTT.client_id)
 	$MQTT.client_id = "x%d" % (2 + (randi()%0x7ffffff8))
 	Clientidtext.text = $MQTT.client_id
 	playername = NetworkGateway.PlayerConnections.LocalPlayer.playername()
 	StatusMQTT.select(1)
 	$MQTT.set_last_will("%s/%s/status" % [Roomnametext.text, $MQTT.client_id], 
 						JSON.stringify({"subject":"closed", "comment":"by_will"}), true)
+	if $VBox/HBox/MQTTUser.text:
+		$MQTT.set_user_pass($VBox/HBox/MQTTUser.text, $VBox/HBox/MQTTPass.text)
+	else:
+		$MQTT.set_user_pass(null, null)
 	var brokerurl = $VBox/HBox/brokeraddress.text
 	$VBox/HBox/brokeraddress.disabled = true
 	$MQTT.connect_to_broker(brokerurl)
@@ -313,7 +333,7 @@ func server_packet_received(sendingclientid, v):
 		peerconnection.session_description_created.connect(server_session_description_created.bind(id))
 		peerconnection.ice_candidate_created.connect(server_ice_candidate_created.bind(id))
 		peerconnection.data_channel_received.connect(Ddata_channel_created)
-		peerconnection.initialize({"iceServers": [ { "urls": ["stun:stun.l.google.com:19302"] } ] })
+		peerconnection.initialize({"iceServers":iceservers })
 		print("serverpacket peer.get_connection_state() ", peerconnection.get_connection_state())
 		multiplayer.multiplayer_peer.add_peer(peerconnection, id)
 		var webrtcpeererror = peerconnection.create_offer()
@@ -362,7 +382,7 @@ func client_packet_received(v):
 		peerconnection.session_description_created.connect(client_session_description_created)
 		peerconnection.ice_candidate_created.connect(client_ice_candidate_created)
 
-		peerconnection.initialize({"iceServers": [ { "urls": ["stun:stun.l.google.com:19302"] } ] })
+		peerconnection.initialize({"iceServers":iceservers})
 		var E = multiplayer.multiplayer_peer.add_peer(peerconnection, 1)
 		if E != 0:	print("Errrr3 ", E)
 		E = peerconnection.set_remote_description("offer", v["data"])

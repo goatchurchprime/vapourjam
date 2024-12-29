@@ -1,4 +1,4 @@
-extends Control
+extends MarginContainer
 
 # keep trying to get the HTML5 version working (not connecting to mqtt!)
 # http://goatchurchprime.github.io/godot_multiplayer_networking_workbench/minimal_peer_networking.html
@@ -31,6 +31,7 @@ var Dconnectedplayerscount = 0
 @onready var DoppelgangerPanel = find_child("DoppelgangerPanel")
 
 signal webrtc_multiplayerpeer_set(asserver)
+signal xclientstatusesupdate
 
 enum NETWORK_PROTOCOL { ENET = 0, 
 						WEBSOCKET = 1,
@@ -86,8 +87,8 @@ func initialstatemqttwebrtc(networkoption, roomname, brokeraddress):
 		MQTTsignalling.get_node("VBox/HBox/brokeraddress").text = brokeraddress
 	if roomname:
 		MQTTsignalling.Roomnametext.text = roomname
-	NetworkOptionsMQTTWebRTC.selected = networkoption
-	_on_NetworkOptionsMQTTWebRTC_item_selected(NetworkOptionsMQTTWebRTC.selected)
+	selectandtrigger_networkoption(networkoption)
+	set_vox_on()
 
 func selectandtrigger_networkoption(networkoption):
 	if ProtocolOptions.selected == NETWORK_PROTOCOL.WEBRTC_MQTTSIGNAL:
@@ -98,6 +99,7 @@ func selectandtrigger_networkoption(networkoption):
 		if NetworkOptions.selected != networkoption:
 			NetworkOptions.selected = networkoption
 			_on_NetworkOptions_item_selected(networkoption)
+	set_vox_on()
 
 func _on_ProtocolOptions_item_selected(np):
 	assert (NetworkOptions.selected == NETWORK_OPTIONS.NETWORK_OFF or NetworkOptions.selected == -1)
@@ -237,6 +239,11 @@ func set_vox_on():
 
 func is_disconnected():
 	return Dconnectedplayerscount == 0
+
+func change_connectedplayerscount(v, reason):
+	assert (v == 1 or v == -1)
+	Dconnectedplayerscount += v
+	prints("change_connectedplayerscount", v, reason, Dconnectedplayerscount)
 
 func simple_webrtc_connect(roomname):
 	if roomname:
