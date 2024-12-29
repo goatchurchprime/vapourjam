@@ -15,13 +15,15 @@ func _ready():
 	current_scene = get_node(sceneorder[currentsceneindex])
 	assert (current_scene != null)
 	preparecurrentscene()
-
+	
 	
 func currentsceneexited(button):
+	rpc("allplayeradvancecurrentscene", (currentsceneindex + 1) % len(sceneorder))
+
+@rpc("any_peer", "call_local", "reliable", 0)
+func allplayeradvancecurrentscene(lcurrentsceneindex):
+	currentsceneindex = lcurrentsceneindex
 	await fadeoutcurrentscene()
-	currentsceneindex += 1
-	if currentsceneindex >= len(sceneorder):
-		currentsceneindex = 0
 	loadnewcurrentscene("res://rooms/%s.tscn" % sceneorder[currentsceneindex])
 	preparecurrentscene()
 	
@@ -79,5 +81,4 @@ func _input(event):
 		if event.pressed and event.keycode == KEY_O:
 			current_scene.activateexitdoor()
 			#load_scene("res://rooms/Level2.tscn")
-			
 			

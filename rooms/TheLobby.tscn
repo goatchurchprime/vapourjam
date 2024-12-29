@@ -1,4 +1,4 @@
-[gd_scene load_steps=23 format=3 uid="uid://c8igqygjx4esl"]
+[gd_scene load_steps=32 format=3 uid="uid://c8igqygjx4esl"]
 
 [ext_resource type="PackedScene" uid="uid://cw8ba26q0dasa" path="res://rooms/BaseRoom.tscn" id="1_tnx3d"]
 [ext_resource type="PackedScene" uid="uid://dstwgq7sc08wb" path="res://objects/FramedPicture.tscn" id="2_bhxjb"]
@@ -10,6 +10,37 @@
 [ext_resource type="PackedScene" uid="uid://clujaf3u776a3" path="res://addons/godot-xr-tools/objects/viewport_2d_in_3d.tscn" id="8_wjlad"]
 [ext_resource type="PackedScene" uid="uid://cl6an8ne65ot3" path="res://guis/guiparticle.tscn" id="9_2pw05"]
 [ext_resource type="PackedScene" uid="uid://dgdb1texynduw" path="res://addons/godot-xr-tools/objects/virtual_keyboard.tscn" id="10_qeuqx"]
+[ext_resource type="PackedScene" uid="uid://br1frnxgn4qbr" path="res://objects/GoOnline.tscn" id="11_8lkbi"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_f5ijq"]
+size = Vector3(1, 1, 0.2)
+
+[sub_resource type="BoxMesh" id="BoxMesh_gjxae"]
+size = Vector3(1, 2, 0.4)
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_5wyfh"]
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_gr8hl"]
+as_normal_map = true
+noise = SubResource("FastNoiseLite_5wyfh")
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ib1x6"]
+cull_mode = 2
+albedo_color = Color(0.176471, 0.176471, 0.176471, 1)
+metallic = 0.9
+roughness = 0.0
+normal_enabled = true
+normal_texture = SubResource("NoiseTexture2D_gr8hl")
+
+[sub_resource type="BoxMesh" id="BoxMesh_sayiw"]
+size = Vector3(1.1, 2.1, 0.1)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_5ceqo"]
+shading_mode = 0
+albedo_color = Color(0.889752, 0.857501, 0.2265, 1)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_ha0e5"]
+size = Vector3(1, 2, 0.5)
 
 [sub_resource type="Curve" id="Curve_aq8le"]
 _data = [Vector2(0.00191572, 0.984988), 0.0, 0.0, 0, 0, Vector2(0.630268, 0.884911), -0.565935, -0.565935, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
@@ -90,6 +121,20 @@ visible = true
 [node name="DoorCameras" parent="." index="2"]
 visible = false
 
+[node name="CollisionShape3D" parent="ExitDoor/XRToolsInteractableAreaButton" index="0"]
+shape = SubResource("BoxShape3D_f5ijq")
+
+[node name="ButtonMesh" parent="ExitDoor/XRToolsInteractableAreaButton" index="1"]
+mesh = SubResource("BoxMesh_gjxae")
+surface_material_override/0 = SubResource("StandardMaterial3D_ib1x6")
+
+[node name="FrameMesh" parent="ExitDoor/XRToolsInteractableAreaButton" index="2"]
+mesh = SubResource("BoxMesh_sayiw")
+surface_material_override/0 = SubResource("StandardMaterial3D_5ceqo")
+
+[node name="CollisionShape3D" parent="ExitDoor/StaticBody3D" index="0"]
+shape = SubResource("BoxShape3D_ha0e5")
+
 [node name="VapourSource" parent="." index="4"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.21686, 0.435695, 1.84113)
 
@@ -149,6 +194,9 @@ screen_size = Vector2(1.5, 2.5)
 scene = ExtResource("9_2pw05")
 viewport_size = Vector2(400, 500)
 transparent = 0
+
+[node name="GoOnline" parent="." index="13" instance=ExtResource("11_8lkbi")]
+transform = Transform3D(-0.0626511, 0, 0.998035, 0, 1, 0, -0.998035, 0, -0.0626511, -2.81315, 0.853992, 0)
 
 [editable path="ExitDoor"]
 [editable path="VapourSource"]
