@@ -180,9 +180,9 @@ func incomingaudiopacket(packet):
 	elif packet[0] == asciiopenbrace and packet[-1] == asciiclosebrace:
 		var h = JSON.parse_string(packet.get_string_from_ascii())
 		if h != null:
-			print("audio json packet ", h)
 			player_audiostreamplayer.playing = true
 			if h.has("talkingtimestart"):
+				print("start audioJSONpacket ", h)
 				if audiostreamopuschunked.opusframesize != h["opusframesize"] or \
 						audiostreamopuschunked.opussamplerate != h["opussamplerate"]:
 					setrecopusvalues(h["opussamplerate"], h["opusframesize"])
@@ -198,6 +198,12 @@ func incomingaudiopacket(packet):
 				opusframequeuecount = 0
 				assert (Npacketinitialbatching < Noutoforderqueue)
 				audiostreamopuschunked.resetdecoder()
+			elif h.has("talkingtimeend"):
+				print("end audioJSONpacket ", h)
+				print("Audio chunk length=", h["talkingtimeduration"]/h["opusframecount"])
+			else:
+				print("unknown audioJSONpacket ", h)
+
 				
 	elif lenchunkprefix == -1:
 		pass
@@ -226,7 +232,6 @@ func incomingaudiopacket(packet):
 				opusframecountR -= 1
 				opusframecount += 1
 				assert (opusframequeuecount >= 0)
-		
 			if false and opusframecount != 0 and opusframequeuecount == 0:
 				# optimize case to avoid using queue
 				audiostreamopuschunked.push_opus_packet(packet, lenchunkprefix, 0)
@@ -241,6 +246,7 @@ func incomingaudiopacket(packet):
 						break
 					audiostreamopuschunked.push_opus_packet(outoforderchunkqueue.pop_front(), lenchunkprefix, 0)
 					outoforderchunkqueue.push_back(null)
+					#prints("bb", opusframecount, opusframequeuecount, audiostreamopuschunked.queue_length_frames())
 					opusframecount += 1
 					opusframequeuecount -= 1
 					assert (opusframequeuecount >= 0)

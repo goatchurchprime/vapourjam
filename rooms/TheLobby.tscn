@@ -142,6 +142,7 @@ debug_color = Color(0, 0.6, 0.7, 0.42)
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.21686, 0.435695, 1.84113)
 
 [node name="GPUParticles3D" parent="VapourSource" index="1"]
+amount = 2000
 process_material = SubResource("ParticleProcessMaterial_vjf7f")
 draw_pass_1 = SubResource("PointMesh_yjfob")
 
